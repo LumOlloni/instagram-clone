@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReplayCommentTable extends Migration
+class CreateTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,10 @@ class CreateReplayCommentTable extends Migration
      */
     public function up()
     {
-        Schema::create('replay_comment', function (Blueprint $table) {
-
+        Schema::create('tags', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('text');
-            $table->bigInteger('comment_id')->unsigned();
+            $table->string('name');
             $table->timestamps();
-
-            $table->foreign('comment_id')->references('id')->on('comments')
-                ->onCascade('delete');
         });
     }
 
@@ -32,6 +27,6 @@ class CreateReplayCommentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('replay_comment');
+        Schema::dropIfExists('tags');
     }
 }
