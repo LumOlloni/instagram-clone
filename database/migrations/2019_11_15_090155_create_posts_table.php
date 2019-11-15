@@ -16,7 +16,7 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
 
             $table->bigIncrements('id');
-            $table->string('image');
+            $table->bigInteger('image_id')->unsigned();
             $table->string('description');
             $table->bigInteger('user_id')->unsigned();
 
@@ -24,6 +24,9 @@ class CreatePostsTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')
                 ->onCascade('delete');
+
+            // $table->foreign('image_id')->references('id')->on('images')
+            //     ->onCascade('delete');
         });
     }
 

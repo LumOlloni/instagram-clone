@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -21,8 +24,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function profile($username)
     {
-        return view('home');
+        $profile = User::where('username', $username)->first();
+        return view('frontend.template.profile')->with('profile', $profile);
     }
 }

@@ -12,9 +12,12 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('frontend.template.instagram');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('/profile/{name}', 'HomeController@profile')->name('profile');
+});
