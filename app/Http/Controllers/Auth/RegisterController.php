@@ -66,6 +66,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
         $profile = new Profile;
         $profile->bio = 'No bio';
         $profile->image_id = 1;

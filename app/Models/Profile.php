@@ -4,10 +4,13 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Image;
+use App\Traits\ImageService;
 use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
+    use ImageService;
+
     protected $table = 'profiles';
     public $primaryKey = 'id';
 
