@@ -17,7 +17,10 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+  
 </head>
 <body class="body-log">
     <div id="app">
@@ -29,5 +32,8 @@
     
     @include('frontend.partials._footer')
     @include('frontend.partials._script')
+    @yield('scripts')
+    
+    <script src="{{asset('js/select2.min.js')}}"></script>
 </body>
 </html>

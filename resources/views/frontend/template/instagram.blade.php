@@ -3,8 +3,6 @@
 @section('content')
   <div  class="jumbotron">
   </div>
-  {{-- <h4 class="text-center">Welcome to Instagram</h4> --}}
-  {{-- <p class="mx-auto col-sm-7">Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus nemo, ipsa aliquid libero tenetur magnam sed ratione? Unde magnam necessitatibus iusto nihil quidem amet ipsa velit fugiat tenetur natus provident quia delectus, nostrum temporibus. Dignissimos nobis delectus ipsam doloribus porro.</p> --}}
   <section id="home-icons" class="py-2">
       <div class="container">
         <h2  class="text-center mt-0">Welcome to Instagram</h2>

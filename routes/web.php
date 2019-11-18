@@ -20,7 +20,6 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/profile/{name}', 'HomeController@profile')->name('profile');
-    // Route::get('/profile/edit/{id}', 'FrontEnd\ProfileController@edit');
-
     Route::resource('profile', 'FrontEnd\ProfileController');
+    Route::resource('post', 'FrontEnd\PostController');
 });
