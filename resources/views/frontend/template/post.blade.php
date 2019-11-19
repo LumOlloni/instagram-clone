@@ -1,5 +1,8 @@
 @extends('frontend.layouts.app')
 
+@section('style')
+    @toastr_css
+@endsection
 @section('content')
 <main class="py-4">
   
@@ -13,7 +16,7 @@
             @csrf 
                 <div class="form-group">
                     <label for="title">Image Descrption </label>
-                    <input value=" {{old('description')}} " placeholder="Enter Title" type="text" class="form-control" name="title" />
+                    <input value=" {{old('description')}} " placeholder="Enter Title" type="text" class="form-control" name="description" />
                 </div>
                 <div class="form-group">
                         <label for="message">Image</label>
@@ -37,11 +40,24 @@
             </form>
         </div>
     </div>
+   
 </div>
 <br><br><br>
+    @jquery
+    @toastr_js
+    @toastr_render
 </main>
+   
 @endsection
 @section('scripts')
+
+    <script>
+        @if(count($errors) > 0)
+            @foreach($errors->all() as $error)
+                toastr.error("{{ $error }}");
+            @endforeach
+        @endif
+    </script>
 
     <script>
         $(document).ready(function() {

@@ -23,6 +23,10 @@
   width: 100%;
 }
 
+.modal {
+  width: 600px;
+}
+
 .emp-profile {
   padding: 3%;
   margin-top: 3%;

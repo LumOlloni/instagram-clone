@@ -11,6 +11,12 @@ class Image extends Model
 
     public $timestamps = true;
 
+    protected $fillable = [
+        'path', 'section',
+    ];
+
+
+
     public function profile()
     {
         return $this->hasOne('App\Models\Profile', 'image_id');

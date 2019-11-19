@@ -20,6 +20,10 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/profile/{name}', 'HomeController@profile')->name('profile');
+    Route::get('/post/{id}', 'FrontEnd\PostController@postModal');
+    Route::get('/fetchComment/{id}', 'FrontEnd\CommentController@fetchComment');
     Route::resource('profile', 'FrontEnd\ProfileController');
+
     Route::resource('post', 'FrontEnd\PostController');
+    Route::resource('comment', 'FrontEnd\CommentController');
 });
