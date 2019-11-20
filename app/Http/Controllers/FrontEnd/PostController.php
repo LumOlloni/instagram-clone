@@ -4,11 +4,12 @@ namespace App\Http\Controllers\FrontEnd;
 
 
 use App\Models\Tag;
+use App\Models\Like;
 use App\Models\Post;
-use App\Models\Image;
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Image;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PostValidation;
@@ -31,7 +32,8 @@ class PostController extends Controller
 
     public function postModal($id)
     {
-        $post = Post::with(['images', 'user', 'tags', 'comments'])->where('id', $id)->first();
+        $post = Post::with(['images', 'user', 'tags', 'comments'])->where('id', $id)
+            ->first();
 
         return response()->json($post);
     }
@@ -96,6 +98,42 @@ class PostController extends Controller
         $post->tags()->sync($request->tags, false);
 
         return redirect()->back();
+    }
+
+    public function like(Request $request)
+    {
+        $post_id = $request->post_id;
+        $isLike = $request->isLike === 'true';
+        $update = false;
+        $post = Post::find($post_id);
+
+        if (!$post) {
+            return null;
+        }
+
+        $user = Auth::user();
+        $like = $user->likes()->where('post_id', $post_id)->first();
+        if ($like) {
+            $alreadyLike = $like->like;
+            $update = true;
+            if ($alreadyLike == $like) {
+                $like->delete();
+                return null;
+            }
+        } else {
+            $like = new Like;
+        }
+        // $like = new Like;
+        $like->like = $isLike;
+        $like->user_id = $user->id;
+        $like->post_id = $post->id;
+
+        if ($update) {
+            $like->update();
+        } else {
+            $like->save();
+        }
+        return null;
     }
 
     /**

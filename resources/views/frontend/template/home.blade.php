@@ -5,16 +5,22 @@
 @endsection
 
 @section('content')
-{{-- data-toggle="modal" data-target="#exampleModal" --}}
+
   <main class="py-4">
     <h2 class="text-center">Photo of Users</h2>
       <div class="container element"> 
           @forelse ($post as $item)
           <div class="card-group"> 
-                <div class="card col-md-4 mx-auto"> 
+                <div class="card mt-4 col-md-4 mx-auto"> 
                     <a  class="openModal" data-id="{{$item->id}}"><img  class="card-img-top" src="/storage/post_image/{{$item->images->path}}"> 
                     </a>
+                    <div class="interaction">
+                        <a class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 1 ? 'You Like this post' : 'Like' : 'Like'}} </a>
+
+                        <a class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 1 ? 'You dislike  this post' : 'Dislike' : 'Dislike'}} </a>
+                      </div>
                 </div> 
+                
           </div> 
           @empty
           <h2>No Post Here</h2>   
@@ -27,6 +33,8 @@
 <br><br>    
 @endsection
 @section('scripts')
+
+    <script src="{{asset('js/like.js')}}"></script>
     <script>
 
     $(document).ready(function(){
@@ -53,24 +61,84 @@
                     `;
               });
               data.comments.forEach(element => {
-                commnet += `<li class=" list-group-item col-md-9">${element.body}</li>
-                <div class="accordion" id="accordionExample">
+                commnet += `<li data-replay="${element.id}"  class="replayedComment list-group-item col-md-9">${element.body}</li><div class="accordion" id="accordionExample">
                   <div class="col-md-3">
-                    <button data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary">Reply</button>
+                    <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
                   </div>
                   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                       <div class="input-group mb-3">
-                          <input type="text" class="form-control" placeholder="Replay Comment" aria-describedby="basic-addon2">
+                          <input id="bodyReplay"  type="text" class="form-control replay" placeholder="Replay Comment">
                           <div class="input-group-append">
-                            <input type="submit" value="Save" class="input-group-text text-white bg-primary" />
+                            <button data-comment="${element.id}" id="replayComment" type="submit" class="input-group-text replay  text-white bg-primary ">Save</button>
                           </div>
                         </div>
                   </div>
-              </div>
-              `  
+              </div>`    
+               
               });
               $('.tags').html(arr);
               $('.fetchComment').html(commnet);
+
+              $('.replay').click(function () {
+                const comment_id = $(this).data('comment');
+              let body = '';
+                $("input[type='text']").each(function() {
+                  body = body + $(this).val();
+                })
+
+                $.ajax({
+                 
+                 type:"Post",
+                 url:"/replayComment",
+                 data:{
+                  bodyReplay:body,
+                  comment_id:comment_id,
+                  post_id:post_id
+                 },
+                 headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                 },
+                 success:function(data){
+                  console.log(data);
+                  toastr.success("You replay comment Successfully");
+                  body.value = '';
+                 },
+                 error:function(err){
+                    console.log(err);
+                }
+                });
+              });
+
+              $('.replayedComment').click(function(){
+
+                const comment_id = $(this).data('replay');
+    
+                let output = '';
+                  $.ajax({
+                    type:"GET",
+                    url:`/replayedComment/${comment_id}`,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                 success:function(response){
+
+                  console.log(response[0].replies);
+                  const r = response[0].replies;
+                    r.forEach(element => {
+                    output += `<li class="list-group-item">${element.body}</li>`;
+                  });
+  
+                  $('.listItem').html(output);
+            
+                 },
+                 error:function(err){
+                    console.log(err);
+                }
+                }); 
+
+                $('#commentModal').modal('show');
+              })
+
               $('#exampleModal').modal('show');
           }
         })
@@ -100,8 +168,6 @@
 
             toastr.success("Comment created Successfully");
             bodyComment.value = '';
-            // outPut += `<li class="list-group-item">${data.body}</li>`;
-            // $('.fetchComment').html(outPut);
           },
           error:function(err){
             console.log(err);
@@ -111,9 +177,38 @@
         e.preventDefault();
       });
 
-      
 
       });
+
+
+      $('.like').on('click', function (event) {
+  
+        const post_id = $(this).data('id');
+      const isLike = event.target.previousElementSibling == null;
+// /     / console.log(isLike);
+    $.ajax({
+        method: 'POST',
+        url: '/like',
+        data: {
+            isLike: isLike,
+            post_id: post_id
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+    })
+    .done(function () {
+        event.target.innerText = isLike ? event.target.innerText == 'Like' ? 'You Like this Post' : 'Like' :
+            event.target.innerText == 'Dislike' ? 'You Dont  Like this Post' : 'Dislike';
+        if (isLike) {
+            event.target.nextElementSibling.innerText = 'DisLike';
+        } else {
+            event.target.previousElementSibling.innerText = 'Like';
+        }
+
+    })
+// console.log(event);
+})
     
     });
     </script>

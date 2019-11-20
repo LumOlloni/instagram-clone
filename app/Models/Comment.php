@@ -21,4 +21,9 @@ class Comment extends Model
     {
         return $this->belongsTo('App\Models\Post');
     }
+
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id');
+    }
 }

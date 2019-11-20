@@ -17,6 +17,19 @@ class CommentController extends Controller
     public function index($id)
     { }
 
+    public function replayComment(Request $request)
+    {
+        $reply = new Comment;
+        $reply->body = $request->bodyReplay;
+        $reply->user()->associate($request->user());
+        $reply->parent_id = $request->comment_id;
+        $post = Post::find($request->post_id);
+
+        $post->comments()->save($reply);
+
+        return response()->json($reply);
+    }
+
 
     public function fetchComment($id)
     {
@@ -48,6 +61,13 @@ class CommentController extends Controller
             'body' => $request->bodyComment,
             'post_id' => $request->post_id
         ]);
+
+        return response()->json($comment);
+    }
+
+    public function replayedComment($id)
+    {
+        $comment = Comment::with('replies')->where('id', $id)->get();
 
         return response()->json($comment);
     }

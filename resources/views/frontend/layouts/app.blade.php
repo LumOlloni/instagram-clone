@@ -25,13 +25,13 @@
     @yield('style')
     <div id="app"></div>
 
-            @include('frontend.partials._navbar')
-            @include('frontend.partials._modal')
-            @yield('content')
+        @include('frontend.partials._navbar')
+        @include('frontend.partials._modal')
+        @yield('content')
     
-    @include('frontend.partials._footer')
-    @include('frontend.partials._script')
-    @yield('scripts')
+        @include('frontend.partials._footer')
+        @include('frontend.partials._script')
+        @yield('scripts')
     
     <script src="{{asset('js/select2.min.js')}}"></script>
 </body>
