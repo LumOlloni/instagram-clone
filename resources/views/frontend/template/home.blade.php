@@ -11,14 +11,15 @@
       <div class="container element"> 
           @forelse ($post as $item)
           <div class="card-group"> 
-                <div class="card mt-4 col-md-4 mx-auto"> 
+                <div  class="card mt-4 col-md-4 mx-auto"> 
                     <a  class="openModal" data-id="{{$item->id}}"><img  class="card-img-top" src="/storage/post_image/{{$item->images->path}}"> 
                     </a>
                     <div class="interaction">
-                        <a class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 1 ? 'You Like this post' : 'Like' : 'Like'}} </a>
+                        <a data-id="{{$item->id}}" class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 1 ? 'You Like this post' : 'Like' : 'Like'}} </a>
 
-                        <a class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 1 ? 'You dislike  this post' : 'Dislike' : 'Dislike'}} </a>
+                        <a data-id = "{{$item->id}}" class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 1 ? 'You dislike  this post' : 'Dislike' : 'Dislike'}} </a>
                       </div>
+                      {{-- <p>{{$item->likes()->count()}}</p> --}}
                 </div> 
                 
           </div> 
@@ -180,35 +181,37 @@
 
       });
 
+      let post = 0;
 
       $('.like').on('click', function (event) {
-  
+        
         const post_id = $(this).data('id');
-      const isLike = event.target.previousElementSibling == null;
-// /     / console.log(isLike);
-    $.ajax({
-        method: 'POST',
-        url: '/like',
-        data: {
-            isLike: isLike,
-            post_id: post_id
-        },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-    })
-    .done(function () {
-        event.target.innerText = isLike ? event.target.innerText == 'Like' ? 'You Like this Post' : 'Like' :
-            event.target.innerText == 'Dislike' ? 'You Dont  Like this Post' : 'Dislike';
-        if (isLike) {
-            event.target.nextElementSibling.innerText = 'DisLike';
-        } else {
-            event.target.previousElementSibling.innerText = 'Like';
-        }
+
+        const isLike = event.target.previousElementSibling == null;
+
+        $.ajax({
+            method: 'POST',
+            url: '/likePost',
+            data: {
+              isLike: isLike,
+              post_id: post_id
+              
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        })
+        .done(function () {
+            event.target.innerText = isLike ? event.target.innerText == 'Like' ? 'You Like this Post' : 'Like' :
+                event.target.innerText == 'Dislike' ? 'You Dont  Like this Post' : 'Dislike';
+            if (isLike) {
+                event.target.nextElementSibling.innerText = 'DisLike';
+            } else {
+                event.target.previousElementSibling.innerText = 'Like';
+            }
+        })
 
     })
-// console.log(event);
-})
     
     });
     </script>

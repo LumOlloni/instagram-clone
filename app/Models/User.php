@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Like;
 use Illuminate\Notifications\Notifiable;
 // use Illuminate\Support\Facades\Auth;
 
@@ -68,23 +69,23 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Profile', 'id');
     }
 
-    public function tagUserName($tag)
-    {
-        $user = User::all();
+    // public function tagUserName($tag)
+    // {
+    //     $user = User::all();
 
-        $username = ['lummche'];
-        $array = [];
+    //     $username = ['lummche'];
+    //     $array = [];
 
-        foreach ($user as $key) {
-            $array = [$key->username];
-            if (in_array($username,  $array)) {
-                // if ('qendro' == $key->username) {
-                // return true;
-                // dd("Success");
-            } else {
-                // return false;
-                dd("Error");
-            }
-        }
-    }
+    //     foreach ($user as $key) {
+    //         $array = [$key->username];
+    //         if (in_array($username,  $array)) {
+    //             // if ('qendro' == $key->username) {
+    //             // return true;
+    //             // dd("Success");
+    //         } else {
+    //             // return false;
+    //             dd("Error");
+    //         }
+    //     }
+    // }
 }

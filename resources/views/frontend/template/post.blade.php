@@ -28,9 +28,7 @@
                         @foreach ($tag as $item)
                             <option value=" {{$item->id}} "> {{$item->name}} </option>
                         @endforeach
-                      
                     </select>
-            
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">

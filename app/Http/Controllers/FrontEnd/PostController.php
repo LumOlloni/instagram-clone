@@ -43,8 +43,13 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+
+    // public function create(){
+    //     $tag = Tag::all();
+    //     return view('frontend.template.post')->with('tag', $tag);
+    // }
+
+    public function createPost(){
         $tag = Tag::all();
         return view('frontend.template.post')->with('tag', $tag);
     }
@@ -66,8 +71,6 @@ class PostController extends Controller
             $ImageUpload = Img::make($files);
             $originalPath = public_path('/storage/post_image/');
             $ImageUpload->resize(340, 340);
-
-
 
             $ImageUpload->save($originalPath . time() . $files->getClientOriginalName());
 
@@ -100,6 +103,8 @@ class PostController extends Controller
         return redirect()->back();
     }
 
+
+
     public function like(Request $request)
     {
         $post_id = $request->post_id;
@@ -112,9 +117,11 @@ class PostController extends Controller
         }
 
         $user = Auth::user();
+
         $like = $user->likes()->where('post_id', $post_id)->first();
+
         if ($like) {
-            $alreadyLike = $like->like;
+            $alreadyLike = $like->likes;
             $update = true;
             if ($alreadyLike == $like) {
                 $like->delete();
@@ -124,15 +131,17 @@ class PostController extends Controller
             $like = new Like;
         }
         // $like = new Like;
-        $like->like = $isLike;
+        $like->likes = $isLike;
         $like->user_id = $user->id;
         $like->post_id = $post->id;
 
         if ($update) {
             $like->update();
-        } else {
+        } 
+        else {
             $like->save();
         }
+        // return response()->json($like);
         return null;
     }
 

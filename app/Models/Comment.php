@@ -10,7 +10,7 @@ class Comment extends Model
     public $primaryKey = 'id';
 
     public $timestamps = true;
-    protected $fillable = ['user_id', 'post_id', 'body', 'published', 'parent_id	'];
+    protected $fillable = ['user_id', 'post_id', 'body', 'published', 'parent_id'];
 
 
     public function user()

@@ -23,8 +23,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/post/{id}', 'FrontEnd\PostController@postModal');
     Route::get('/fetchComment/{id}', 'FrontEnd\CommentController@fetchComment');
     Route::post('/replayComment', 'FrontEnd\CommentController@replayComment');
-    Route::post('/like', 'FrontEnd\PostController@like')->route('like.post');
+    Route::post('/likePost', 'FrontEnd\PostController@like');
     Route::get('/replayedComment/{id}', 'FrontEnd\CommentController@replayedComment');
+    Route::get('/createPost' , 'FrontEnd\PostController@createPost');
     Route::resource('profile', 'FrontEnd\ProfileController');
 
     Route::resource('post', 'FrontEnd\PostController');
