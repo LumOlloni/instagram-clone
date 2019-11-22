@@ -8,7 +8,7 @@
 
   <main class="py-4">
     <h2 class="text-center">Photo of Users</h2>
-      <div class="container element"> 
+      {{-- <div class="ajaxFetch container element"> 
           @forelse ($post as $item)
           <div class="card-group"> 
                 <div  class="card mt-4 col-md-4 mx-auto"> 
@@ -17,15 +17,18 @@
                     <div class="interaction">
                         <a data-id="{{$item->id}}" class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 1 ? 'You Like this post' : 'Like' : 'Like'}} </a>
 
-                        <a data-id = "{{$item->id}}" class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 1 ? 'You dislike  this post' : 'Dislike' : 'Dislike'}} </a>
+                        <a data-id = "{{$item->id}}" class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 0 ? 'You dislike  this post' : 'Dislike' : 'Dislike'}} </a>
                       </div>
-                      {{-- <p>{{$item->likes()->count()}}</p> --}}
                 </div> 
-                
           </div> 
           @empty
           <h2>No Post Here</h2>   
           @endforelse
+      </div> --}}
+      <div class="ajaxFetch container element"> 
+        <div id="load_data"></div>
+        <div id="load_data_message"></div>
+        {{-- <div class="qendrim"></div> --}}
       </div>
       @jquery
       @toastr_js
@@ -36,8 +39,8 @@
 @section('scripts')
 
     <script src="{{asset('js/like.js')}}"></script>
+    {{-- <script src="{{asset('js/ajaxCall.js')}}"></script> --}}
     <script>
-
     $(document).ready(function(){
       $('.openModal').click(function(){
         const tags = document.querySelectorAll('.tags');
@@ -177,42 +180,74 @@
       }
         e.preventDefault();
       });
-
-
       });
 
-      let post = 0;
+     
+      var limit = 5;
+      var start = 0;
+      var action = 'inactive';
 
-      $('.like').on('click', function (event) {
-        
-        const post_id = $(this).data('id');
-
-        const isLike = event.target.previousElementSibling == null;
-
+      function load_data(limit ,  start){
+      
         $.ajax({
-            method: 'POST',
-            url: '/likePost',
-            data: {
-              isLike: isLike,
-              post_id: post_id
-              
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-        })
-        .done(function () {
-            event.target.innerText = isLike ? event.target.innerText == 'Like' ? 'You Like this Post' : 'Like' :
-                event.target.innerText == 'Dislike' ? 'You Dont  Like this Post' : 'Dislike';
-            if (isLike) {
-                event.target.nextElementSibling.innerText = 'DisLike';
-            } else {
-                event.target.previousElementSibling.innerText = 'Like';
-            }
-        })
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  },
+                data:{
+                    limit:limit ,
+                    start:start
+                },
+                url: "/fetchPost",
+                cache: false,
 
-    })
-    
+                success: function(data){
+
+                  console.log(data);
+
+                  $('#load_data').append(data);
+             
+
+                  if (data == '') {
+                    
+                     $('#load_data_message').html("<button type='submit' class='btn btn-warning'>No Data Found </button>");
+                     action = 'active';  
+                    }
+                  else {
+                    $('#load_data_message').html("<button type='submit' class='btn btn-warning'>Please Wait ... </button>");
+                    action = 'inactive'; 
+                  }
+                }
+            });
+      }
+
+
+      if (action == 'inactive') {
+        action = 'active'
+        load_data(limit ,  start);
+         
+      }
+
+      $(window).scroll(function () {
+   
+        if ($(window).scrollTop() + $(window).height() > $('#load_data').height() && action == 'inactive') {
+
+          action = 'active';
+          start = start + limit;
+        
+          setTimeout(function () {
+            load_data(limit ,  start);
+          },1000);
+        
+           
+        }
+  
+});
     });
+
+
+
+   
+
     </script>
 @endsection

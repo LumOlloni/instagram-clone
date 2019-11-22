@@ -20,6 +20,8 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/profile/{name}', 'HomeController@profile')->name('profile');
+    Route::post('/fetchPost' , 'FrontEnd\PostController@fetchPost');
+
     Route::get('/post/{id}', 'FrontEnd\PostController@postModal');
     Route::get('/fetchComment/{id}', 'FrontEnd\CommentController@fetchComment');
     Route::post('/replayComment', 'FrontEnd\CommentController@replayComment');

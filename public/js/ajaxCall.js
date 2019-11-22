@@ -81,53 +81,69 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./resources/js/like.js":
-/*!******************************!*\
-  !*** ./resources/js/like.js ***!
-  \******************************/
+/***/ "./resources/js/ajaxCall.js":
+/*!**********************************!*\
+  !*** ./resources/js/ajaxCall.js ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var post = 0;
-$('.like').on('click', function (event) {
-  var post_id = $(this).data('id');
-  var isLike = event.target.previousElementSibling == null;
-  $.ajax({
-    method: 'POST',
-    url: '/likePost',
-    data: {
-      isLike: isLike,
-      post_id: post_id
-    },
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  }).done(function () {
-    event.target.innerText = isLike ? event.target.innerText == 'Like' ? 'You Like this Post' : 'Like' : event.target.innerText == 'Dislike' ? 'You Dont Like this Post' : 'Dislike';
-
-    if (isLike) {
-      event.target.nextElementSibling.innerText = 'DisLike';
-    } else {
-      event.target.previousElementSibling.innerText = 'Like';
-    }
-  });
-});
+// var no=1;
+// var outPut = '';
+// // var user = " {!! (Auth::user() !!}";
+// console.log(user);
+// var user = {{!! Auth::user() !!}};
+// $(window).scroll(function () {
+//     if(no==1)
+//     {
+//         if ($(window).height() + $(window).scrollTop() == $(document).height()) {
+//             no+=5;
+//             $.ajax({
+//                 type: "POST",
+//                 headers: {
+//                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//                   },
+//                 data:{
+//                     no: no ,
+//                 },
+//                 url: "/fetchPost",
+//                 cache: false,
+//                 success: function(html){
+//                     console.log(html);
+//                     html.forEach(element => {
+//                 //         outPut += `<div class="card-group"> 
+//                 //         <div  class="card mt-4 col-md-4 mx-auto"> 
+//                 //             <a  class="openModal" data-id="${element.id}"><img  class="card-img-top" src="/storage/post_image/${element.images.path}"> 
+//                 //             </a>
+//                 //             <div class="interaction">
+//                 //                 <a data-id="${element.id}" class="like" href="#">` {{@Auth::user()->likes()->where('post_id' , ${element.id})->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 1 ? 'You Like this post' : 'Like' : 'Like'}} ` </a>
+//                 //                 <a data-id = "${element.id}" class="like" href="#">` {{@Auth::user()->likes()->where('post_id' , ${element.id})->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 0 ? 'You dislike  this post' : 'Dislike' : 'Dislike'}} `</a>
+//                 //               </div>
+//                 //         </div> 
+//                 //   </div> `
+//                     });
+//                     // $('.ajaxFetch').html(outPut);
+//                 }
+//             });
+//         }
+//     }
+// });
 
 /***/ }),
 
-/***/ 1:
-/*!************************************!*\
-  !*** multi ./resources/js/like.js ***!
-  \************************************/
+/***/ 2:
+/*!****************************************!*\
+  !*** multi ./resources/js/ajaxCall.js ***!
+  \****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\instagram-clone\resources\js\like.js */"./resources/js/like.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\instagram-clone\resources\js\ajaxCall.js */"./resources/js/ajaxCall.js");
 
 
 /***/ })

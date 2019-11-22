@@ -32,7 +32,7 @@ class Post extends Model
 
     public function likes()
     {
-        return $this->belongsTo(Like::class);
+        return $this->belongsTo(Like::class , 'post_id');
     }
 
     public function comments()

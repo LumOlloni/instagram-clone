@@ -81,53 +81,30 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./resources/js/like.js":
-/*!******************************!*\
-  !*** ./resources/js/like.js ***!
-  \******************************/
+/***/ "./resources/js/fetchPost.js":
+/*!***********************************!*\
+  !*** ./resources/js/fetchPost.js ***!
+  \***********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var post = 0;
-$('.like').on('click', function (event) {
-  var post_id = $(this).data('id');
-  var isLike = event.target.previousElementSibling == null;
-  $.ajax({
-    method: 'POST',
-    url: '/likePost',
-    data: {
-      isLike: isLike,
-      post_id: post_id
-    },
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  }).done(function () {
-    event.target.innerText = isLike ? event.target.innerText == 'Like' ? 'You Like this Post' : 'Like' : event.target.innerText == 'Dislike' ? 'You Dont Like this Post' : 'Dislike';
-
-    if (isLike) {
-      event.target.nextElementSibling.innerText = 'DisLike';
-    } else {
-      event.target.previousElementSibling.innerText = 'Like';
-    }
-  });
-});
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open 'C:\\xampp\\htdocs\\instagram-clone\\resources\\js\\fetchPost.js'");
 
 /***/ }),
 
-/***/ 1:
-/*!************************************!*\
-  !*** multi ./resources/js/like.js ***!
-  \************************************/
+/***/ 2:
+/*!*****************************************!*\
+  !*** multi ./resources/js/fetchPost.js ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\instagram-clone\resources\js\like.js */"./resources/js/like.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\instagram-clone\resources\js\fetchPost.js */"./resources/js/fetchPost.js");
 
 
 /***/ })

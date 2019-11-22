@@ -14,7 +14,7 @@ class Like extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'user_id', 'likess', 'user_id'
+        'user_id', 'like', 'post_id'
     ];
 
     public function user()

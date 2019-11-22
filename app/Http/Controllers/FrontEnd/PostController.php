@@ -25,10 +25,44 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::all();
-
-        return view('frontend.template.home')->with('post', $post);
+        $post = Post::all()->take(5);
+        return view('frontend.template.home')->with('post' , $post);
     }
+
+
+
+    public function fetchPost(Request $request){
+     
+        $limit = $request->get('limit');
+
+        $start = $request->get('start');
+
+        $post = Post::with(['images','likes'])->offset($start)->limit($limit)->get();
+        
+        // Auth::user()->likes()->where('post_id', $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 0 ? "You dislike  this post" : "Dislike" : "Dislike"
+  
+        foreach($post as $p){
+
+           echo 
+                '
+                <div class="card-group"> 
+                    <div class="card mt-4 col-md-4 mx-auto"> 
+                        <a class="openModal" data-id="'.$p->id.'"><img  class="card-img-top" src="/storage/post_image/'.$p->images->path.'"> 
+                        </a>
+                        <div class="interaction">
+                            <a data-id="'.$p->id.'" class="like" href="#"> '. print(Auth::user()->likes()->where('post_id' , $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 1 ? 'You Like this post' : 'Like' : 'Like') .' </a>
+                            <a data-id = "'.$p->id.'" class="like" href="#">'. print(Auth::user()->likes()->where('post_id' , $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 0 ? 'You dislike this post' : 'Dislike' : 'Dislike') .'</a>
+                        </div>
+                    </div>  
+            </div> ';
+   
+         }
+
+       
+        }
+
+      
+     
 
     public function postModal($id)
     {
@@ -103,10 +137,10 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-
-
     public function like(Request $request)
     {
+
+        // $count = 0;
         $post_id = $request->post_id;
         $isLike = $request->isLike === 'true';
         $update = false;
@@ -121,7 +155,8 @@ class PostController extends Controller
         $like = $user->likes()->where('post_id', $post_id)->first();
 
         if ($like) {
-            $alreadyLike = $like->likes;
+
+            $alreadyLike = $like;
             $update = true;
             if ($alreadyLike == $like) {
                 $like->delete();
@@ -131,7 +166,7 @@ class PostController extends Controller
             $like = new Like;
         }
         // $like = new Like;
-        $like->likes = $isLike;
+        $like->like = $isLike;
         $like->user_id = $user->id;
         $like->post_id = $post->id;
 
