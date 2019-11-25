@@ -10,6 +10,12 @@ class FollowsController extends Controller
 {
     public function store(User $user)
     {
-        return auth()->user()->following()->toggle($user->profile);
+        return auth()->user()->following()->attach($user->profile, ['status' => 1] , false);
+    }
+    
+
+    public function unFollow(User $user){
+
+        return auth()->user()->following()->detach($user->profile);
     }
 }

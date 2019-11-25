@@ -19,9 +19,9 @@
 
                         @else      
                             @if (Auth::user()->following->contains($profile->id))
-                                <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary" type="submit">UnFollow</button>
+                                <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-primary " type="submit">UnFollow</button>
                             @else
-                                <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary" type="submit">Follow</button>
+                                <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary " type="submit">Follow</button>
                             @endif    
                         @endif
                         
@@ -44,43 +44,56 @@
 
     <script>
 
-        // const user = '{!! Auth::user() !!}';
         const button = document.getElementById('follow');
-        const user_id = button.getAttribute('data-id');
+        const unFollow = document.getElementById('unFollow');
+        console.log(unFollow);
+        let user_id = 0;
+        // const unFollow = document.getElementById('unFollow');
+
+        if (unFollow) {
+              user_id = unFollow.getAttribute('data-id');
+        }
+        else if(button){
+              user_id = button.getAttribute('data-id');
+        }
+      
+
         const profile = "{!! $profile->username !!}";
        
-        // console.log(user_following);
-
-       
-        // console.log(user_id);
-
         const followUser = (e) => {
 
             axios.post(`/follow/${user_id}`)
             .then((result) => {
                 window.location.href = `/profile/${profile}`;
                 console.log(result);
-                // if (user_following == 1 ) {
-                //     button.innerHTML = 'UnFollow';
-                // }
-                // else if (user_following == false) {
-                //     button.innerHTML = 'Follow';
-                // }
+           
             }).catch((err) => {
                 console.log(err);
             });;
             e.preventDefault();
         }
 
-        button.addEventListener('click' , followUser);
+        const UnfollowUser = (e) => {
 
-        
-        // $(document).ready(function () {
-        //     $('#follow').on('click' , function (e) {
-        //         console.log("Follow");
-        //         e.preventDefault();
-        //     })
-        // })
+            axios.post(`/unfollow/${user_id}`)
+            .then((result) => {
+                window.location.href = `/profile/${profile}`;
+                console.log(result);
+
+            }).catch((err) => {
+                console.log(err);
+            });;
+            e.preventDefault();
+        }
+
+        if (button) {
+            button.addEventListener('click' , followUser);
+        }
+        else if(unFollow){
+            unFollow.addEventListener('click' , UnfollowUser);
+        }
+      
+
 
     </script>
     

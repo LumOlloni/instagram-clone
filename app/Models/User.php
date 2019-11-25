@@ -44,7 +44,7 @@ class User extends Authenticatable
 
     public function following()
     {
-        return $this->belongsToMany(Profile::class);
+        return $this->belongsToMany(Profile::class)->withPivot('status');
     }
 
     public function comments()
