@@ -149,9 +149,25 @@
           },
           success:function(data){
             console.log(data);
+            
+            outPut +=  `<li data-replay="${data.id}"  class="replayedComment list-group-item col-md-9">${data.body}</li><div class="accordion" id="accordionExample">
+                  <div class="col-md-3">
+                    <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                      <div class="input-group mb-3">
+                          <input id="bodyReplay"  type="text" class="form-control replay" placeholder="Replay Comment">
+                          <div class="input-group-append">
+                            <button data-comment="${data.id}" id="replayComment" type="submit" class="input-group-text replay  text-white bg-primary ">Save</button>
+                          </div>
+                        </div>
+                  </div>
+              </div>`;
 
             toastr.success("Comment created Successfully");
             bodyComment.value = '';
+
+            $('.fetchComment').html(outPut);
           },
           error:function(err){
             console.log(err);
