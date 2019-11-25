@@ -31,46 +31,47 @@ class PostController extends Controller
 
 
 
+
+
     public function fetchPost(Request $request){
      
         $limit = $request->get('limit');
 
         $start = $request->get('start');
 
-        $post = Post::with(['images','likes'])->offset($start)->limit($limit)->get();
+        $post = Post::with(['images','likes'])->offset($start)->limit( $limit)->get();
+
+
+        return view('frontend.template.postList' , compact('post'));
         
         // Auth::user()->likes()->where('post_id', $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 0 ? "You dislike  this post" : "Dislike" : "Dislike"
   
-        foreach($post as $p){
+        // foreach($post as $p){
 
-           echo 
-                '
-                <div class="card-group"> 
-                    <div class="card mt-4 col-md-4 mx-auto"> 
-                        <a class="openModal" data-id="'.$p->id.'"><img  class="card-img-top" src="/storage/post_image/'.$p->images->path.'"> 
-                        </a>
-                        <div class="interaction">
-                            <a data-id="'.$p->id.'" class="like" href="#"> '. print(Auth::user()->likes()->where('post_id' , $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 1 ? 'You Like this post' : 'Like' : 'Like') .' </a>
-                            <a data-id = "'.$p->id.'" class="like" href="#">'. print(Auth::user()->likes()->where('post_id' , $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 0 ? 'You dislike this post' : 'Dislike' : 'Dislike') .'</a>
-                        </div>
-                    </div>  
-            </div> ';
-   
-         }
-
-       
+        //    echo 
+        //         '
+        //         <div class="card-group"> 
+        //             <div class="card mt-4 col-md-4 mx-auto"> 
+        //                 <a class="openModal" data-id="'.$p->id.'"><img  class="card-img-top" src="/storage/post_image/'.$p->images->path.'"> 
+        //                 </a>
+        //                 <div class="interaction">
+        //                     <a data-id="'.$p->id.'" class="like" href="#"> '. print(Auth::user()->likes()->where('post_id' , $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 1 ? 'You Like this post' : 'Like' : 'Like') .' </a>
+        //                     <a data-id = "'.$p->id.'" class="like" href="#">'. print(Auth::user()->likes()->where('post_id' , $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 0 ? 'You dislike this post' : 'Dislike' : 'Dislike') .'</a>
+        //                 </div>
+        //             </div>  
+                   
+        //     </div> ';
+        //  }
         }
 
-      
-     
+        public function postModal($id)
+        {
+            $post = Post::with(['images', 'user', 'tags', 'comments'])->where('id', $id)
+                ->first();
 
-    public function postModal($id)
-    {
-        $post = Post::with(['images', 'user', 'tags', 'comments'])->where('id', $id)
-            ->first();
+            return response()->json($post);
+        }
 
-        return response()->json($post);
-    }
 
     /**
      * Show the form for creating a new resource.
