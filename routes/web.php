@@ -22,7 +22,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/profile/{name}', 'HomeController@profile')->name('profile');
     // Route::get('/postFetch' , 'FrontEnd\PostController@fivePost');
     Route::post('/fetchPost' , 'FrontEnd\PostController@fetchPost');
-
+    Route::post('follow/{user}' , 'FrontEnd\FollowsController@store') ;
     Route::get('/post/{id}', 'FrontEnd\PostController@postModal');
     Route::get('/fetchComment/{id}', 'FrontEnd\CommentController@fetchComment');
     Route::post('/replayComment', 'FrontEnd\CommentController@replayComment');

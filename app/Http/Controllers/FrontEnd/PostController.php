@@ -25,7 +25,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::all()->take(5);
+        $users = auth()->user()->following()->pluck('profiles.id');
+
+        $post = Post::whereIn('user_id' , $users)->take(5)->get();
         return view('frontend.template.home')->with('post' , $post);
     }
 
@@ -34,12 +36,14 @@ class PostController extends Controller
 
 
     public function fetchPost(Request $request){
-     
+        $users = auth()->user()->following()->pluck('profiles.id');
+
         $limit = $request->get('limit');
 
         $start = $request->get('start');
 
-        $post = Post::with(['images','likes'])->offset($start)->limit( $limit)->get();
+        // $post = Post::with(['images','likes'])->offset($start)->limit( $limit)->get();
+        $post = Post::whereIn('user_id' , $users)->with(['images','likes'])->offset($start)->limit( $limit)->get();
 
 
         return view('frontend.template.postList' , compact('post'));

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileValidation;
 use App\Models\Profile;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -62,10 +64,19 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-
+       
         $profile = Profile::find($id);
 
-        return view('frontend.template.edit')->with('profile', $profile);
+        if ($profile->id == Auth::user()->id) {
+            return view('frontend.template.edit')->with('profile' , $profile);
+        }
+        else {
+            return abort('403');
+        }
+     
+
+       
+      
     }
 
     /**

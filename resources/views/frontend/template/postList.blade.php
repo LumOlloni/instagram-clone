@@ -167,7 +167,7 @@
             toastr.success("Comment created Successfully");
             bodyComment.value = '';
 
-            $('.fetchComment').html(outPut);
+            $('.ajaxFetchComment').html(outPut);
           },
           error:function(err){
             console.log(err);

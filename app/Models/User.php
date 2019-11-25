@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Like;
+use App\Models\Profile;
 use Illuminate\Notifications\Notifiable;
 // use Illuminate\Support\Facades\Auth;
 
@@ -39,14 +40,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function followers()
-    {
-        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id')->withTimestamps();
-    }
+  
 
-    public function followings()
+    public function following()
     {
-        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id')->withTimestamps();
+        return $this->belongsToMany(Profile::class);
     }
 
     public function comments()

@@ -29,6 +29,7 @@
                 <div class="row fetchComment">
 
                 </div>
+                <div class="ajaxFetchComment"></div>
               </div>
             </ul>
         </div>

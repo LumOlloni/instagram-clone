@@ -26,4 +26,9 @@ class Profile extends Model
     {
         return $this->belongsTo(Image::class, 'image_id');
     }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
 }
