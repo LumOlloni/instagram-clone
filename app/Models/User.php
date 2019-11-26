@@ -40,11 +40,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-  
-
+    
     public function following()
     {
-        return $this->belongsToMany(Profile::class)->withPivot('status');
+        return $this->belongsToMany(Profile::class)
+        ->withPivot('status');
     }
 
     public function comments()

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,24 @@ class HomeController extends Controller
      */
     public function profile($username)
     {
+
         $profile = User::where('username', $username)->first();
-        return view('frontend.template.profile')->with('profile', $profile);
+
+
+        $posts = Post::with('images')
+        ->whereHas('images' , function($q){
+            $q->where('section' , 'post');
+        })
+        ->where('user_id' , $profile->id)->get();
+
+        $users = User::with('following')
+        ->whereHas('following', function($q) {
+        
+            $q->where('status', '=', 1); 
+        })
+        ->first();
+        
+        return view('frontend.template.profile')->with(['profile' => $profile 
+        , 'users' => $users , 'posts' => $posts]);
     }
 }

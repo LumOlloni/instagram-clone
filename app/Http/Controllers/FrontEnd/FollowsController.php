@@ -10,7 +10,15 @@ class FollowsController extends Controller
 {
     public function store(User $user)
     {
-        return auth()->user()->following()->attach($user->profile, ['status' => 1] , false);
+        if ($user->profile->is_public == 0) {
+
+            return auth()->user()->following()->attach($user->profile, ['status' => 0] , false);
+        }
+
+        else if($user->profile->is_public == 1){
+
+            return auth()->user()->following()->attach($user->profile, ['status' => 1] , false);
+        }
     }
     
 

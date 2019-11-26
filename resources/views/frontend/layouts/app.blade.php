@@ -17,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @toastr_css
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
    
    

@@ -40,6 +40,7 @@ trait ImageService
       $profile->images()->associate($image);
 
       return $image->path;
+      
     }
   }
 

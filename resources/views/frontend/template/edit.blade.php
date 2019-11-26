@@ -43,6 +43,18 @@
                 </div>
             </form>           
         </div>
+        @jquery
+        @toastr_js
+        @toastr_render 
     </main>
-
+@endsection
+@section('scripts')
+    <script>
+        @if(count($errors) > 0)
+            @foreach($errors->all() as $error)
+                toastr.error("{{ $error }}");
+            @endforeach
+        @endif
+    
+    </script>
 @endsection

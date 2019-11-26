@@ -8,7 +8,13 @@
 
   <main class="py-4">
     <h2 class="text-center">Photo of Users</h2>
-     
+
+    @if (isset($message))
+          <div class="text-danger"> {{$message}} </div>
+    @endif
+  
+      
+          
       <div class="ajaxFetch container element"> 
           <div id="load_data" class="load_data"></div>   
           <div id="load_data_message"></div>
@@ -83,17 +89,10 @@
         
           setTimeout(function () {
             load_data(limit ,  start);
-          },1000);
-        
-           
+          },1000);  
         }
-  
 });
     });
-
-
-
-   
 
     </script>
 @endsection

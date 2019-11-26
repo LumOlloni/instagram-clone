@@ -6,9 +6,11 @@ use App\Models\Tag;
 use App\Models\Like;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ImagePost;
 
 class Post extends Model
 {
+    use ImagePost;
 
     protected $table = 'posts';
     public $primaryKey = 'id';
@@ -39,6 +41,7 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class)->whereNull('parent_id');
     }
+    
     public function tags()
     {
         return $this->belongsToMany(Tag::class);

@@ -20,7 +20,6 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/profile/{name}', 'HomeController@profile')->name('profile');
-    // Route::get('/postFetch' , 'FrontEnd\PostController@fivePost');
     Route::post('/fetchPost' , 'FrontEnd\PostController@fetchPost');
     Route::post('follow/{user}' , 'FrontEnd\FollowsController@store') ;
     Route::post('unfollow/{user}' , 'FrontEnd\FollowsController@unFollow');
@@ -29,7 +28,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/replayComment', 'FrontEnd\CommentController@replayComment');
     Route::post('/likePost', 'FrontEnd\PostController@like');
     Route::get('/replayedComment/{id}', 'FrontEnd\CommentController@replayedComment');
-    Route::get('/createPost' , 'FrontEnd\PostController@createPost');
+    Route::get('/createPost' , 'FrontEnd\PostController@createPost');    
     Route::resource('profile', 'FrontEnd\ProfileController');
 
     Route::resource('post', 'FrontEnd\PostController');

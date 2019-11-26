@@ -17,11 +17,14 @@
 
                         @if (Auth::user()->id == $profile->id)
 
-                        @else      
-                            @if (Auth::user()->following->contains($profile->id))
+                        @else  
+                            @if (Auth::user()->following->contains($profile->id) && $users)
+
                                 <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-primary " type="submit">UnFollow</button>
+                            @elseif(!(Auth::user()->following->contains($profile->id)))
+                                    <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary " type="submit">Follow </button>
                             @else
-                                <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary " type="submit">Follow</button>
+                                <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-secondary" type="submit">Request Sent  </button>
                             @endif    
                         @endif
                         
@@ -39,6 +42,21 @@
             </div>      
     </div>
 </main>
+@if ($profile->is_public == 1 || (Auth::user()->following->contains($profile->id) && $users))
+@if (count($posts) > 0)
+<section class="mt-1">
+    <div class="wrapper">
+        @foreach ($posts as $item)
+            <figure>
+                <img data-id="{{$item->id}}" src="/storage/thumbnail/post_thumbnail/{{$item->images->path}}" class="post_image showImage" alt="Image 1">
+            </figure>
+        @endforeach
+    </div>
+</section>
+@endif
+    @else
+        <h3 class="text-danger text-center">This Account is Private</h3> 
+@endif
 @endsection
 @section('scripts')
 
@@ -46,9 +64,9 @@
 
         const button = document.getElementById('follow');
         const unFollow = document.getElementById('unFollow');
+
         console.log(unFollow);
         let user_id = 0;
-        // const unFollow = document.getElementById('unFollow');
 
         if (unFollow) {
               user_id = unFollow.getAttribute('data-id');
@@ -92,6 +110,24 @@
         else if(unFollow){
             unFollow.addEventListener('click' , UnfollowUser);
         }
+
+        const showImage = document.querySelectorAll('.showImage');
+
+        showImage.forEach((element) => {
+
+            element.addEventListener('click' , function (e) {
+                const id = element.getAttribute('data-id');
+                
+                axios.get(`/post/${id}/edit`)
+                .then((response) => {
+
+                    window.location.href = `/post/${id}/edit`;
+                })
+                .catch(err => console.log(err));
+
+                e.preventDefault();
+            })
+        })
       
 
 

@@ -138,6 +138,35 @@
   color: #0062cc;
 }
 
+.wrapper {
+  display: grid;
+  width: 850px;
+  margin: 0 auto;
+  grid-template-columns: 2fr 2fr 2fr;
+  grid-gap: 1em;
+  padding-bottom: 2rem;
+}
+
+.post_image {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+#img-style {
+  width: 728px;
+  height: 400px;
+  padding-bottom: 12px;
+}
+
+.del-btn {
+  float: right;
+  margin-right: 5rem;
+  padding-right: 5rem;
+  position: relative;
+}
+
 /*!
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors

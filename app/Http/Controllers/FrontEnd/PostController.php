@@ -11,6 +11,7 @@ use App\Models\Image;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostEdit;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PostValidation;
 use Intervention\Image\Facades\Image as Img;
@@ -25,10 +26,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $users = auth()->user()->following()->pluck('profiles.id');
-
-        $post = Post::whereIn('user_id' , $users)->take(5)->get();
-        return view('frontend.template.home')->with('post' , $post);
+        return view('frontend.template.home');
     }
 
 
@@ -36,36 +34,21 @@ class PostController extends Controller
 
 
     public function fetchPost(Request $request){
-        $users = auth()->user()->following()->pluck('profiles.id');
+
+        $users = auth()->user()->following()
+        ->where('status' , 1)
+        ->pluck('profiles.id');
 
         $limit = $request->get('limit');
 
         $start = $request->get('start');
 
-        // $post = Post::with(['images','likes'])->offset($start)->limit( $limit)->get();
         $post = Post::whereIn('user_id' , $users)->with(['images','likes'])->offset($start)->limit( $limit)->get();
 
 
         return view('frontend.template.postList' , compact('post'));
         
-        // Auth::user()->likes()->where('post_id', $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 0 ? "You dislike  this post" : "Dislike" : "Dislike"
-  
-        // foreach($post as $p){
-
-        //    echo 
-        //         '
-        //         <div class="card-group"> 
-        //             <div class="card mt-4 col-md-4 mx-auto"> 
-        //                 <a class="openModal" data-id="'.$p->id.'"><img  class="card-img-top" src="/storage/post_image/'.$p->images->path.'"> 
-        //                 </a>
-        //                 <div class="interaction">
-        //                     <a data-id="'.$p->id.'" class="like" href="#"> '. print(Auth::user()->likes()->where('post_id' , $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 1 ? 'You Like this post' : 'Like' : 'Like') .' </a>
-        //                     <a data-id = "'.$p->id.'" class="like" href="#">'. print(Auth::user()->likes()->where('post_id' , $p->id)->first() ? Auth::user()->likes()->where('post_id' , $p->id)->first()->like == 0 ? 'You dislike this post' : 'Dislike' : 'Dislike') .'</a>
-        //                 </div>
-        //             </div>  
-                   
-        //     </div> ';
-        //  }
+       
         }
 
         public function postModal($id)
@@ -204,7 +187,20 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        
+        $post = Post::find($id);
+
+        if ($post->user_id == Auth::user()->id) {
+            $tag = Tag::all();
+
+            return view('frontend.template.postEdit')->with(['post' => $post , 'tag' => $tag]);
+
+        }
+        else {
+            return redirect()->back();
+        }
+
+       
     }
 
     /**
@@ -214,9 +210,23 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostEdit $request, $id)
     {
-        //
+         $post = Post::find($id);
+       
+         $post->description = $request->get('description');
+         $post->user_id = Auth::id();
+         $post->uploadEditImage('img' , $post ,$request );
+       
+         $post->update();
+
+         $post->tags()->sync($request->tags);
+
+         toastr()->success('Post Updated Succefully');
+
+         return redirect()->back();
+         
+         
     }
 
     /**
@@ -227,6 +237,19 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+
+        $image = Image::find($post->image_id);
+
+        $post->tags()->detach();
+
+        $post->deleteImage($post);
+        
+        $image->delete();
+
+        $post->delete();
+
+
+        return response()->json(['success' => 'true']);
     }
 }
