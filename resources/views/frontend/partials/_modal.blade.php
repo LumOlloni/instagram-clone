@@ -1,10 +1,12 @@
 
 {{-- Post Modal  --}}
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
+    <div class="modal-dialog" id="modal-width" role="document">
+      <div class="modal-content" id="modal-content">
         <div class="modal-header">
+
           <h5 class="text-center modal-title" id="exampleModalLabel"></h5>
+            <div class="mx-auto" id="editButton"></div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -37,6 +39,9 @@
     </div>
   </div>
 {{-- end of Post Modal --}}
+
+
+
 
 {{-- Comment Modal --}}
 

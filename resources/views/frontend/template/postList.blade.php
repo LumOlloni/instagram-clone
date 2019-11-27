@@ -1,9 +1,10 @@
-<div class="ajaxFetch container element"> 
+<div class="ajaxFetch container element">
       @forelse ($post as $item)
 
-          <div class="card-group"> 
-                  <div  class="card mt-4 col-md-4 mx-auto"> 
-                      <a id="id" class="openModal" data-id="{{$item->id}}"><img  class="card-img-top" src="/storage/post_image/{{$item->images->path}}"> 
+          <div class="card-group">
+                  <div  class="card mt-4 col-md-4 mx-auto">
+
+                      <a id="id" class="openModal" data-id="{{$item->id}}"><img  class="card-img-top" src="/storage/post_image/{{$item->images->path}}">
                       </a>
                       <div class="interaction">
                           <a data-id="{{$item->id}}" class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 1 ? 'You Like this post' : 'Like' : 'Like'}} </a>
@@ -11,20 +12,27 @@
                           <a data-id = "{{$item->id}}" class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ? Auth::user()->likes()->where('post_id' , $item->id)->first()->like == 0 ? 'You dislike  this post' : 'Dislike' : 'Dislike'}} </a>
                         </div>
                   </div>
-                  {{-- <button data-id="{{$item->id}}" class="btn btn-primary openModal">Open Modal</button>  --}}
-            </div> 
+            </div>
             @empty
-            <h2>No Post Here</h2>   
+            <h2>No Post Here</h2>
 
-        @endforelse 
-  </div> 
+        @endforelse
+  </div>
 
   <script>
 
+      $(document).ready(function () {
+
        $('.openModal').click(function(e){
+
         const tags = document.querySelectorAll('.tags');
-   
+        const user = '{!! Auth::id() !!}';
+
+
+        const edit = document.getElementById('editButton');
+
         var post_id = $(this).data('id');
+
 
         $.ajax({
           type:'GET',
@@ -36,6 +44,16 @@
             let arr = '';
             let commnet = '';
             $('#img').attr('src' , `/storage/post_image/${data.images.path}`);
+
+              if (data.user_id ==  user) {
+
+                  const edit_button = document.createElement('a');
+                  edit_button.className = 'btn btn-warning';
+                  edit_button.innerText = "Edit This Post";
+                  edit_button.href = `/post/${post_id}/edit`;
+
+                  edit.appendChild(edit_button);
+              }
               console.log(data);
               $('.modal-title').html(data.description);
               data.tags.forEach(element => {
@@ -57,21 +75,21 @@
                           </div>
                         </div>
                   </div>
-              </div>`    
-               
+              </div>`
+
               });
               $('.tags').html(arr);
               $('.fetchComment').html(commnet);
 
               $('.replay').click(function () {
                 const comment_id = $(this).data('comment');
-              let body = '';
+                let body = '';
                 $("input[type='text']").each(function() {
                   body = body + $(this).val();
                 })
 
                 $.ajax({
-                 
+
                  type:"Post",
                  url:"/replayComment",
                  data:{
@@ -96,7 +114,7 @@
               $('.replayedComment').click(function(){
 
                 const comment_id = $(this).data('replay');
-    
+
                 let output = '';
                   $.ajax({
                     type:"GET",
@@ -111,14 +129,14 @@
                     r.forEach(element => {
                     output += `<li class="list-group-item">${element.body}</li>`;
                   });
-  
+
                   $('.listItem').html(output);
-            
+
                  },
                  error:function(err){
                     console.log(err);
                 }
-                }); 
+                });
 
                 $('#commentModal').modal('show');
               })
@@ -149,7 +167,7 @@
           },
           success:function(data){
             console.log(data);
-            
+
             outPut +=  `<li data-replay="${data.id}"  class="replayedComment list-group-item col-md-9">${data.body}</li><div class="accordion" id="accordionExample">
                   <div class="col-md-3">
                     <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
@@ -177,5 +195,11 @@
         e.preventDefault();
       });
       });
-  
+
+
+
+
+
+      });
+
   </script>

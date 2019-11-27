@@ -43,12 +43,13 @@ class PostController extends Controller
 
         $start = $request->get('start');
 
-        $post = Post::whereIn('user_id' , $users)->with(['images','likes'])->offset($start)->limit( $limit)->get();
+//        $post = Post::whereIn('user_id' , $users)->with(['images','likes' ,'user'])->offset($start)->limit( $limit)->get();
+        $post = Post::whereIn('user_id' , $users)->with(['images','likes' ,'user'])->offset($start)->limit($limit)->get();
 
+//        dd($post->images->path);
 
         return view('frontend.template.postList' , compact('post'));
-        
-       
+
         }
 
         public function postModal($id)
@@ -160,7 +161,7 @@ class PostController extends Controller
 
         if ($update) {
             $like->update();
-        } 
+        }
         else {
             $like->save();
         }
@@ -187,7 +188,7 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        
+
         $post = Post::find($id);
 
         if ($post->user_id == Auth::user()->id) {
@@ -200,7 +201,7 @@ class PostController extends Controller
             return redirect()->back();
         }
 
-       
+
     }
 
     /**
@@ -213,11 +214,11 @@ class PostController extends Controller
     public function update(PostEdit $request, $id)
     {
          $post = Post::find($id);
-       
+
          $post->description = $request->get('description');
          $post->user_id = Auth::id();
          $post->uploadEditImage('img' , $post ,$request );
-       
+
          $post->update();
 
          $post->tags()->sync($request->tags);
@@ -225,8 +226,8 @@ class PostController extends Controller
          toastr()->success('Post Updated Succefully');
 
          return redirect()->back();
-         
-         
+
+
     }
 
     /**
@@ -244,7 +245,7 @@ class PostController extends Controller
         $post->tags()->detach();
 
         $post->deleteImage($post);
-        
+
         $image->delete();
 
         $post->delete();

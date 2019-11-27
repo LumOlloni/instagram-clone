@@ -12,19 +12,17 @@
     @if (isset($message))
           <div class="text-danger"> {{$message}} </div>
     @endif
-  
-      
-          
-      <div class="ajaxFetch container element"> 
-          <div id="load_data" class="load_data"></div>   
+
+      <div class="ajaxFetch container element">
+          <div id="load_data" class="load_data"></div>
           <div id="load_data_message"></div>
       </div>
 
       @jquery
       @toastr_js
-      @toastr_render 
+      @toastr_render
   </main>
-<br><br>    
+<br><br>
 @endsection
 @section('scripts')
 
@@ -32,13 +30,18 @@
     {{-- <script src="{{asset('js/ajaxCall.js')}}"></script> --}}
     <script>
     $(document).ready(function(){
-     
+
+
+
+
+
+
       var limit = 5;
       var start = 0;
       var action = 'inactive';
 
       function load_data(limit ,  start){
-      
+
         $.ajax({
                 type: "POST",
                 headers: {
@@ -56,18 +59,16 @@
 
                   console.log(data);
 
-                  // outPut += `<button data-id="${data.id}" class="btn btn-primary openModal">Open Modal</button> `;
                   $('#load_data').append(data);
-             
 
                   if (data == '') {
-                    
+
                      $('#load_data_message').html("<button type='submit' class='btn btn-warning'>No Data Found </button>");
-                     action = 'active';  
+                     action = 'active';
                     }
                   else {
                     $('#load_data_message').html("<button type='submit' class='btn btn-warning'>Please Wait ... </button>");
-                    action = 'inactive'; 
+                    action = 'inactive';
                   }
                 }
             });
@@ -77,19 +78,19 @@
       if (action == 'inactive') {
         action = 'active'
         load_data(limit ,  start);
-         
+
       }
 
       $(window).scroll(function () {
-   
+
         if ($(window).scrollTop() + $(window).height() > $('#load_data').height() && action == 'inactive') {
 
           action = 'active';
           start = start + limit;
-        
+
           setTimeout(function () {
             load_data(limit ,  start);
-          },1000);  
+          },1000);
         }
 });
     });

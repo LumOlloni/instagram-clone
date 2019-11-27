@@ -17,7 +17,7 @@
 
                         @if (Auth::user()->id == $profile->id)
 
-                        @else  
+                        @else
                             @if (Auth::user()->following->contains($profile->id) && $users)
 
                                 <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-primary " type="submit">UnFollow</button>
@@ -25,11 +25,11 @@
                                     <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary " type="submit">Follow </button>
                             @else
                                 <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-secondary" type="submit">Request Sent  </button>
-                            @endif    
+                            @endif
                         @endif
-                        
+
                          <p class="proile-rating">Photos : <span>{{ $profile->post->count() }}</span>
-                             Follower:<span>{{$profile->profile->followers->count()}}</span> Following 
+                             Follower:<span>{{$profile->profile->followers->count()}}</span> Following
                              <span> {{$profile->following->count()}} </span> </p>
                     </div>
                 </div>
@@ -37,12 +37,12 @@
                     @if ($profile->id == Auth::user()->id)
                         <a href = "{{route('profile.edit' , $profile->id)}} "  type="submit" class="profile-edit-btn" name="btnAddMore" >Edit Profile</a>
                     @endif
-                   
+
                 </div>
-            </div>      
+            </div>
     </div>
 </main>
-@if ($profile->is_public == 1 || (Auth::user()->following->contains($profile->id) && $users))
+ @if ($profile->is_public == 1 || Auth::id() || (Auth::user()->following->contains($profile->id) && $users))
 @if (count($posts) > 0)
 <section class="mt-1">
     <div class="wrapper">
@@ -54,9 +54,9 @@
     </div>
 </section>
 @endif
-    @else
-        <h3 class="text-danger text-center">This Account is Private</h3> 
-@endif
+     @else
+        <h2 class="text-danger text-center">This Account Is Private</h2>
+ @endif
 @endsection
 @section('scripts')
 
@@ -74,17 +74,16 @@
         else if(button){
               user_id = button.getAttribute('data-id');
         }
-      
 
         const profile = "{!! $profile->username !!}";
-       
+
         const followUser = (e) => {
 
             axios.post(`/follow/${user_id}`)
             .then((result) => {
                 window.location.href = `/profile/${profile}`;
                 console.log(result);
-           
+
             }).catch((err) => {
                 console.log(err);
             });;
@@ -117,7 +116,7 @@
 
             element.addEventListener('click' , function (e) {
                 const id = element.getAttribute('data-id');
-                
+
                 axios.get(`/post/${id}/edit`)
                 .then((response) => {
 
@@ -128,9 +127,9 @@
                 e.preventDefault();
             })
         })
-      
+
 
 
     </script>
-    
+
 @endsection

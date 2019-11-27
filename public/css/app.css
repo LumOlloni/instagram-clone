@@ -23,8 +23,13 @@
   width: 100%;
 }
 
-.modal {
-  width: 600px;
+#modal-width {
+  width: 700px !important;
+  margin: auto;
+}
+
+#modal-content {
+  height: 60%;
 }
 
 .emp-profile {
