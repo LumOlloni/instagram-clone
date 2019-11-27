@@ -41,6 +41,9 @@
                 </div>
             </div>
     </div>
+    @jquery
+    @toastr_js
+    @toastr_render
 </main>
  @if ($profile->is_public == 1 || Auth::id() || (Auth::user()->following->contains($profile->id) && $users))
 @if (count($posts) > 0)
@@ -48,7 +51,7 @@
     <div class="wrapper">
         @foreach ($posts as $item)
             <figure>
-                <img data-id="{{$item->id}}" src="/storage/thumbnail/post_thumbnail/{{$item->images->path}}" class="post_image showImage" alt="Image 1">
+                <img class="openModal" data-id="{{$item->id}}" src="/storage/thumbnail/post_thumbnail/{{$item->images->path}}" class="post_image showImage" alt="Image 1">
             </figure>
         @endforeach
     </div>
@@ -58,8 +61,8 @@
         <h2 class="text-danger text-center">This Account Is Private</h2>
  @endif
 @endsection
-@section('scripts')
 
+@section('scripts')
     <script>
 
         const button = document.getElementById('follow');
@@ -110,23 +113,222 @@
             unFollow.addEventListener('click' , UnfollowUser);
         }
 
-        const showImage = document.querySelectorAll('.showImage');
 
-        showImage.forEach((element) => {
+        $(document).ready(function () {
 
-            element.addEventListener('click' , function (e) {
-                const id = element.getAttribute('data-id');
+            $('.openModal').click(function(e){
 
-                axios.get(`/post/${id}/edit`)
-                .then((response) => {
 
-                    window.location.href = `/post/${id}/edit`;
+
+                const tags = document.querySelectorAll('.tags');
+                const user = '{!! Auth::id() !!}';
+
+
+                const edit = document.getElementById('editButton');
+
+                var post_id = $(this).data('id');
+
+
+                $.ajax({
+                    type:'GET',
+                    url: `/post/${post_id}`,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+
+                    success:function(data){
+                        let arr = '';
+                        let commnet = '';
+
+                        $('#img').attr('src' , `/storage/post_image/${data.images.path}`);
+
+                        if (data.user_id ==  user) {
+
+                            document.getElementById('edit_button').href = `/post/${post_id}/edit`;
+
+                        }
+
+                        console.log(data);
+                        $('.modal-title').html(data.description);
+                        data.tags.forEach(element => {
+                            arr += `<div>
+                        <p class="ml-2 text-primary col-md-4 ">${element.name}</p>
+                    </div>
+                    `;
+                        });
+                        data.comments.forEach(element => {
+
+                            const bool = (element.user_id == user);
+                            console.log(bool);
+
+                            let deleteBtn = (bool ? ` <div class="col-md-3">
+                                    <button onclick="myFunction(${element.id})" data-delete = "" id="deleteBtn"  class="mt-1 btn btn-danger deleteBtn ">Delete</button>
+                                 </div>` : '');
+
+                            commnet += `<li data-replay="${element.id}"  class="replayedComment list-group-item col-md-9">${element.body}</li><div class="accordion" id="accordionExample">
+                              <div class="col-md-3">
+                                <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
+                              </div>
+                                ${deleteBtn}
+                              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                  <div class="input-group mb-3">
+                                      <input id="bodyReplay"  type="text" class="form-control replay" placeholder="Replay Comment">
+                                      <div class="input-group-append">
+                                        <button data-comment="${element.id}" id="replayComment" type="submit" class="input-group-text replay  text-white bg-primary ">Save</button>
+                                      </div>
+                                    </div>
+                              </div>
+                          </div>`;
+
+                        });
+                        $('.tags').html(arr);
+                        $('.fetchComment').html(commnet);
+
+                        $('.replay').click(function () {
+                            const comment_id = $(this).data('comment');
+                            let body = '';
+                            $("input[type='text']").each(function() {
+                                body = body + $(this).val();
+                            })
+
+                            $.ajax({
+
+                                type:"Post",
+                                url:"/replayComment",
+                                data:{
+                                    bodyReplay:body,
+                                    comment_id:comment_id,
+                                    post_id:post_id
+                                },
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success:function(data){
+                                    console.log(data);
+                                    toastr.success("You replay comment Successfully");
+                                    body.value = '';
+                                },
+                                error:function(err){
+                                    console.log(err);
+                                }
+                            });
+                        });
+
+                        $('.replayedComment').click(function(){
+
+                            const comment_id = $(this).data('replay');
+
+                            let output = '';
+                            $.ajax({
+                                type:"GET",
+                                url:`/replayedComment/${comment_id}`,
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success:function(response){
+
+                                    console.log(response[0].replies);
+                                    const r = response[0].replies;
+                                    r.forEach(element => {
+                                        // output += `<li class="list-group-item">${element.body}</li>`;
+                                    });
+
+                                    $('.listItem').html(output);
+
+                                },
+                                error:function(err){
+                                    console.log(err);
+                                }
+                            });
+
+                            $('#commentModal').modal('show');
+                        })
+
+                        $('#exampleModal').modal('show');
+                    }
                 })
-                .catch(err => console.log(err));
 
-                e.preventDefault();
-            })
-        })
+                $('.comment').submit(function (e) {
+                    const bodyComment = document.getElementById('bodyComment');
+                    const auth = "{{Auth::id()}}";
+
+                    if (bodyComment.value == '') {
+                        toastr.error("Empty Body Comment");
+                    }
+                    else {
+                        let outPut = '';
+                        $.ajax({
+                            type:"Post",
+                            url:"{{route('comment.store')}}",
+                            data:{
+                                user_id:auth,
+                                post_id:post_id,
+                                bodyComment:bodyComment.value
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success:function(data){
+
+                                const bool = (data.user_id == user);
+
+                                let deleteBtn = (bool ? ` <div class="col-md-3">
+                                    <button onclick="myFunction(${data.id})" id="deleteBtn"  data-delete = "${data.id}"  class="mt-1 btn btn-danger deleteBtn">Delete</button>
+                                 </div>` : '');
+
+
+                                console.log(data);
+
+                                outPut += `<li data-replay="${data.id}"  class="replayedComment list-group-item col-md-9">${data.body}</li><div class="accordion" id="accordionExample">
+                                      <div class="col-md-3">
+                                        <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
+                                      </div>
+                                        ${deleteBtn}
+                                      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                          <div class="input-group mb-3">
+                                              <input id="bodyReplay"  type="text" class="form-control replay" placeholder="Replay Comment">
+                                              <div class="input-group-append">
+                                                <button data-comment="${data.id}" id="replayComment" type="submit" class="input-group-text replay  text-white bg-primary ">Save</button>
+                                              </div>
+                                            </div>
+                                      </div>
+                                  </div>`;
+                                toastr.success("Comment created Successfully");
+                                bodyComment.value = '';
+
+                                $('.ajaxFetchComment').html(outPut);
+
+                            },
+                            error:function(err){
+                                console.log(err);
+                            }
+                        });
+                    }
+                    e.preventDefault();
+                });
+
+                window.myFunction = (id) => {
+                    $.ajax({
+                        type:'DELETE',
+                        url:`/comment/${id}`,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success:function (data) {
+                            console.log(data);
+                            toastr.success("Comment Deleted Succefully");
+                        },
+                        error:function (err) {
+                              console.log(err);
+                        }
+                    })
+                };
+            });
+
+
+        });
+
+
 
 
 

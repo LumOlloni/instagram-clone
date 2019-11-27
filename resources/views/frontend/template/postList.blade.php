@@ -1,3 +1,5 @@
+@extends('frontend.layouts.app')
+
 <div class="ajaxFetch container element">
       @forelse ($post as $item)
 
@@ -17,9 +19,10 @@
         @endforelse
   </div>
 
-  <script src="{{asset('js/like.js')}}"></script>
-  <script>
 
+<script src="{{asset('js/like.js')}}"></script>
+
+  <script>
       $(document).ready(function () {
 
        $('.openModal').click(function(e){
@@ -28,7 +31,7 @@
         const user = '{!! Auth::id() !!}';
 
 
-        const edit = document.getElementById('editButton');
+        // const edit = document.getElementById('editButton');
 
         var post_id = $(this).data('id');
 
@@ -46,12 +49,8 @@
 
               if (data.user_id ==  user) {
 
-                  const edit_button = document.createElement('a');
-                  edit_button.className = 'btn btn-warning';
-                  edit_button.innerText = "Edit This Post";
-                  edit_button.href = `/post/${post_id}/edit`;
+                  document.getElementById('edit_button').href = `/post/${post_id}/edit`;
 
-                  edit.appendChild(edit_button);
               }
               console.log(data);
               $('.modal-title').html(data.description);

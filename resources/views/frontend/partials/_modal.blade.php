@@ -6,7 +6,8 @@
         <div class="modal-header">
 
           <h5 class="text-center modal-title" id="exampleModalLabel"></h5>
-            <div class="mx-auto" id="editButton"></div>
+{{--            <div class="mx-auto" id="editButton"></div>--}}
+            <a id="edit_button" class="btn btn-warning mx-auto">Edit Post</a>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
