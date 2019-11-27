@@ -43,10 +43,8 @@ class PostController extends Controller
 
         $start = $request->get('start');
 
-//        $post = Post::whereIn('user_id' , $users)->with(['images','likes' ,'user'])->offset($start)->limit( $limit)->get();
         $post = Post::whereIn('user_id' , $users)->with(['images','likes' ,'user'])->offset($start)->limit($limit)->get();
 
-//        dd($post->images->path);
 
         return view('frontend.template.postList' , compact('post'));
 
@@ -131,8 +129,8 @@ class PostController extends Controller
 
         // $count = 0;
         $post_id = $request->post_id;
-        $isLike = $request->isLike === 'true';
-        $update = false;
+//        $isLike = $request->isLike === 'true';
+//        $update = false;
         $post = Post::find($post_id);
 
         if (!$post) {
@@ -141,12 +139,11 @@ class PostController extends Controller
 
         $user = Auth::user();
 
-        $like = $user->likes()->where('post_id', $post_id)->first();
+        $like = Like::with('user')->where('post_id', $post_id)->first();
 
         if ($like) {
 
             $alreadyLike = $like;
-            $update = true;
             if ($alreadyLike == $like) {
                 $like->delete();
                 return null;
@@ -155,16 +152,20 @@ class PostController extends Controller
             $like = new Like;
         }
         // $like = new Like;
-        $like->like = $isLike;
+//        $like->like = $isLike;
         $like->user_id = $user->id;
         $like->post_id = $post->id;
+        $like->save();
 
-        if ($update) {
-            $like->update();
-        }
-        else {
-            $like->save();
-        }
+
+//        if ($update) {
+//            $like->update();
+//        }
+//        else {
+//            $like->save();
+//        }
+
+
         // return response()->json($like);
         return null;
     }

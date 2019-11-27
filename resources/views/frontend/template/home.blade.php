@@ -26,15 +26,8 @@
 @endsection
 @section('scripts')
 
-    <script src="{{asset('js/like.js')}}"></script>
-    {{-- <script src="{{asset('js/ajaxCall.js')}}"></script> --}}
     <script>
     $(document).ready(function(){
-
-
-
-
-
 
       var limit = 5;
       var start = 0;

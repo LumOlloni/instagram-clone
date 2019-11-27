@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class Like extends Model
 {
     protected $table = 'likes';
-    
+
     public $primaryKey = 'id';
 
     public $timestamps = true;
 
     protected $fillable = [
-        'user_id', 'like', 'post_id'
+        'user_id', 'post_id'
     ];
 
     public function user()
