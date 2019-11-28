@@ -17,18 +17,21 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::post('/commentStore' , 'FrontEnd\CommentController@storePost');
+
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/profile/{name}', 'HomeController@profile')->name('profile');
     Route::post('/fetchPost' , 'FrontEnd\PostController@fetchPost');
     Route::post('follow/{user}' , 'FrontEnd\FollowsController@store') ;
+    Route::get('markAsRead' , 'FrontEnd\PostController@readNotification')->name('markRead');
     Route::post('unfollow/{user}' , 'FrontEnd\FollowsController@unFollow');
     Route::get('/post/{id}', 'FrontEnd\PostController@postModal');
     Route::get('/fetchComment/{id}', 'FrontEnd\CommentController@fetchComment');
     Route::post('/replayComment', 'FrontEnd\CommentController@replayComment');
     Route::post('/likePost', 'FrontEnd\PostController@like');
     Route::get('/replayedComment/{id}', 'FrontEnd\CommentController@replayedComment');
-    Route::get('/createPost' , 'FrontEnd\PostController@createPost');    
+    Route::get('/createPost' , 'FrontEnd\PostController@createPost');
     Route::resource('profile', 'FrontEnd\ProfileController');
 
     Route::resource('post', 'FrontEnd\PostController');

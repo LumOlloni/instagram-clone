@@ -26,6 +26,25 @@
                       </li>
                   @endif
               @else
+                <li class="nav-item dropdown">
+                    <a id="navbarNotification" class="nav-link dropdown-toggle mt-1" href="#" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="#">
+                        @if(auth()->user()->unreadNotifications->count())
+                            <span class="badge badge-danger">{{auth()->user()->unreadNotifications->count()}}</span>
+                            <i class="fas fa-bell fa-lg  mr-1"></i>
+                            @else
+                                <i class="fas fa-bell fa-lg  mr-1"></i>
+                        @endif
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarNotification">
+                        @foreach(auth()->user()->unreadNotifications as $n)
+
+                            <a href="{{route('markRead')}}" style="background-color: lightgray" class="dropdown-item">
+                                {{$n->data['data']}}
+                            </a>
+                        @endforeach
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a href="{{route('post.index')}}" class="nav-link">Home</a>
                  </li>

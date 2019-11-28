@@ -11,16 +11,17 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @toastr_css
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-   
-   
+
+
 </head>
 <body class="body-log">
     @yield('style')
@@ -29,11 +30,11 @@
         @include('frontend.partials._navbar')
         @include('frontend.partials._modal')
         @yield('content')
-    
+
         @include('frontend.partials._footer')
         @include('frontend.partials._script')
         @yield('scripts')
-    
+
     <script src="{{asset('js/select2.min.js')}}"></script>
 </body>
 </html>

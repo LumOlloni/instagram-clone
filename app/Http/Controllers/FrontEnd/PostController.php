@@ -227,8 +227,13 @@ class PostController extends Controller
          toastr()->success('Post Updated Succefully');
 
          return redirect()->back();
+    }
 
+    public function readNotification()
+    {
+         auth()->user()->unreadNotifications->markAsRead();
 
+         return redirect()->back();
     }
 
     /**
