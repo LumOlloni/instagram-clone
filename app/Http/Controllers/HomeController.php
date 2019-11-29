@@ -37,15 +37,42 @@ class HomeController extends Controller
         })
         ->where('user_id' , $profile->id)->get();
 
-        $users = User::with('following')
-        ->whereHas('following', function($q) {
 
-            $q->where('status', '=', 1);
+        $id = $profile->id;
+        $auth = Auth::id();
+
+
+        $existProfile = Profile::where('id',  Auth::id())->whereHas('followers', function ($q) use ($id) {
+            $q->where('user_id', $id );
+            $q->where('status' , 0);
+
+        })->exists();
+
+        $checkProfile = Profile::where('id', $id )->where('is_public' , 0)->whereHas('followers', function ($q) use ($id) {
+            $q->where('user_id', $id );
+            $q->where('status' , 0);
+
+        })->exists();
+
+
+        $followBack = Profile::where('id', $auth )->whereHas('followers', function ($q) use ($id) {
+            $q->where('user_id', $id );
+            $q->where('status' , 1);
+
+        })->exists();
+
+
+
+
+        $users = Profile::where('id' ,  $id)->whereHas('followers' , function ($q) use ($auth){
+            $q->where('user_id' , $auth);
+            $q->where('status' , 0);
         })
-        ->first();
+        ->exists();
+
 
         return view('frontend.template.profile')->with(['profile' => $profile
-        , 'users' => $users , 'posts' => $posts]);
+        , 'users' => $users , 'posts' => $posts , 'existProfile' => $existProfile , 'checkProfile' => $checkProfile , 'followBack' => $followBack] );
     }
 
     public function search(Request $request)

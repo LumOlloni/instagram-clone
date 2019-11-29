@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('follow/{user}' , 'FrontEnd\FollowsController@store') ;
     Route::get('markAsRead' , 'FrontEnd\PostController@readNotification')->name('markRead');
     Route::post('unfollow/{user}' , 'FrontEnd\FollowsController@unFollow');
+    Route::post('/accept/{id}' , 'FrontEnd\FollowsController@accept');
     Route::get('/search' , 'HomeController@search');
     Route::get('/post/{id}', 'FrontEnd\PostController@postModal');
     Route::get('/fetchComment/{id}', 'FrontEnd\CommentController@fetchComment');

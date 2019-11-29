@@ -15,17 +15,30 @@
                          </h5>
                          <h6>{{$profile->profile->bio}}</h6>
 
+{{--                        @if($profile->profile)--}}
+
                         @if (Auth::user()->id == $profile->id)
 
                         @else
-                            @if (Auth::user()->following->contains($profile->id) && $users)
+                            @if($existProfile)
 
-                                <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-primary " type="submit">UnFollow</button>
-                            @elseif(!(Auth::user()->following->contains($profile->id)))
-                                    <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary " type="submit">Follow </button>
-                            @else
-                                <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-secondary" type="submit">Request Sent  </button>
+                                <button  id="accept" class="btn btn-primary " type="submit">Accept Follow</button>
+                                @else
+
+                                @if ($users)
+                                    <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-secondary" type="submit">Request Sent</button>
+                                @elseif((Auth::user()->following->contains($profile->id)))
+                                    <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-primary " type="submit">UnFollow </button>
+                                 @elseif($followBack)
+                                    <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary" type="submit">Follow Back </button>
+                                @elseif(!(Auth::user()->following->contains($profile->id)))
+                                    <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary" type="submit">Follow </button>
+                                @elseif($users)
+
+                                @endif
+
                             @endif
+
                         @endif
 
                          <p class="proile-rating">Photos : <span>{{ $profile->post->count() }}</span>
@@ -45,17 +58,19 @@
     @toastr_js
     @toastr_render
 </main>
- @if ($profile->is_public == 1 || Auth::id() || (Auth::user()->following->contains($profile->id) && $users))
+ @if ($profile->profile->is_public == 1 ||  (Auth::id() == $profile->id  &&  (!$users)))
 @if (count($posts) > 0)
 <section class="mt-1">
     <div class="wrapper">
-        @foreach ($posts as $item)
+        @foreach($posts as $item)
             <figure>
                 <img class="openModal" data-id="{{$item->id}}" src="/storage/thumbnail/post_thumbnail/{{$item->images->path}}" class="post_image showImage" alt="Image 1">
             </figure>
         @endforeach
     </div>
 </section>
+    @else
+         <h2 class="text-danger text-center">No Post Here</h2>
 @endif
      @else
         <h2 class="text-danger text-center">This Account Is Private</h2>
@@ -67,6 +82,7 @@
 
         const button = document.getElementById('follow');
         const unFollow = document.getElementById('unFollow');
+        const accept = document.getElementById('accept');
 
         console.log(unFollow);
         let user_id = 0;
@@ -79,6 +95,8 @@
         }
 
         const profile = "{!! $profile->username !!}";
+        const userId = "{!! $profile->id !!}";
+        const user = "{!! Auth::id() !!}";
 
         const followUser = (e) => {
 
@@ -89,9 +107,19 @@
 
             }).catch((err) => {
                 console.log(err);
-            });;
+            });
             e.preventDefault();
         }
+
+        const accpet = (e) => {
+            axios.post(`/accept/${userId}`)
+                .then((result) => {
+                    console.log(result);
+                    window.location.href = `/profile/${profile}`;
+                })
+                .catch(err => console.log(err))
+            e.preventDefault();
+        };
 
         const UnfollowUser = (e) => {
 
@@ -102,16 +130,21 @@
 
             }).catch((err) => {
                 console.log(err);
-            });;
+            });
             e.preventDefault();
         }
 
         if (button) {
             button.addEventListener('click' , followUser);
         }
-        else if(unFollow){
+         if(unFollow){
             unFollow.addEventListener('click' , UnfollowUser);
         }
+
+         if(accept) {
+            accept.addEventListener('click' , accpet);
+        }
+
 
 
         $(document).ready(function () {
@@ -143,9 +176,8 @@
                         $('#img').attr('src' , `/storage/post_image/${data.images.path}`);
 
                         if (data.user_id ==  user) {
-
+                            document.getElementById('edit_button').style.display = 'block';
                             document.getElementById('edit_button').href = `/post/${post_id}/edit`;
-
                         }
 
                         console.log(data);
