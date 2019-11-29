@@ -26,6 +26,17 @@
                       </li>
                   @endif
               @else
+                  <form class="form-inline mr-5">
+                      <div class="md-form my-0">
+                          <input id="search" name="search" class="form-control mr-sm-2" type="text" placeholder="Search">
+                      </div>
+{{--                      <button class="btn btn-outline-warning btn-md my-2 my-sm-0 ml-3" type="submit">Search</button>--}}
+                  </form>
+                  <div id="result" class="panel panel-default" style="width:250px; position:absolute; top:55px; z-index:1; display:none">
+                      <ul  style="margin-top:10px; list-style-type:none;" id="usersList">
+
+                      </ul>
+                  </div>
                 <li class="nav-item dropdown">
                     <a id="navbarNotification" class="nav-link dropdown-toggle mt-1" href="#" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="#">
@@ -36,6 +47,7 @@
                                 <i class="fas fa-bell fa-lg  mr-1"></i>
                         @endif
                     </a>
+
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarNotification">
                         @foreach(auth()->user()->unreadNotifications as $n)
 

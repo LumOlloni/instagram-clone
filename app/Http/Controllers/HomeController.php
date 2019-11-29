@@ -39,12 +39,33 @@ class HomeController extends Controller
 
         $users = User::with('following')
         ->whereHas('following', function($q) {
-        
-            $q->where('status', '=', 1); 
+
+            $q->where('status', '=', 1);
         })
         ->first();
-        
-        return view('frontend.template.profile')->with(['profile' => $profile 
+
+        return view('frontend.template.profile')->with(['profile' => $profile
         , 'users' => $users , 'posts' => $posts]);
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+        $users = User::where('name' , 'like' , "$search%" )
+            ->orWhere('username' , 'like', "$search%")
+        ->get();
+
+        $output = '';
+
+        if ($users){
+            foreach ($users as $user) {
+                $output .= '<li style="right: 45px;" class="list-group-item mb-2"><a href="profile/'. $user->username .'">'.$user->name.'</a></li>';
+            }
+
+            return $output;
+        }
+//        return response()->json($users);
+
+
     }
 }

@@ -7,7 +7,7 @@
 @section('content')
 
   <main class="py-4">
-    <h2 class="text-center">Photo of Users</h2>
+    <h2 class="text-center mt-4">Photo of Users</h2>
 
     @if (isset($message))
           <div class="text-danger"> {{$message}} </div>
@@ -26,7 +26,10 @@
 @endsection
 @section('scripts')
 
+    <script src="{{asset('js/search.js')}}"></script>
+
     <script>
+
     $(document).ready(function(){
 
       var limit = 5;

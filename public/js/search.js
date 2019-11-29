@@ -81,48 +81,54 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./resources/js/like.js":
-/*!******************************!*\
-  !*** ./resources/js/like.js ***!
-  \******************************/
+/***/ "./resources/js/search.js":
+/*!********************************!*\
+  !*** ./resources/js/search.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var post = 0;
-$('.like').on('click', function (event) {
-  var post_id = $(this).data('id');
-  var isLike = event.target.previousElementSibling == null;
-  $.ajax({
-    method: 'POST',
-    url: '/likePost',
-    data: {
-      isLike: isLike,
-      post_id: post_id
-    },
+//
+$(document).ready(function () {
+  $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
-  }).done(function () {
-    event.target.innerText = isLike ? event.target.innerText == 'Like' ? 'Dislike' : 'Like' : 'Dislike';
   });
-  event.preventDefault();
+  $('#search').keyup(function () {
+    var search = $('#search').val();
+    var ul = $('#usersList');
+
+    if (search == "") {
+      $("#usersList").html("");
+      $('#result').hide();
+    } else {
+      $.get("/search", {
+        search: search
+      }, function (data) {
+        console.log(data);
+        $('#usersList').empty().html(data);
+        $('#result').show();
+      });
+    }
+  });
 });
 
 /***/ }),
 
-/***/ 2:
-/*!************************************!*\
-  !*** multi ./resources/js/like.js ***!
-  \************************************/
+/***/ 1:
+/*!**************************************!*\
+  !*** multi ./resources/js/search.js ***!
+  \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\instagram-clone\resources\js\like.js */"./resources/js/like.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\instagram-clone\resources\js\search.js */"./resources/js/search.js");
 
 
 /***/ })
