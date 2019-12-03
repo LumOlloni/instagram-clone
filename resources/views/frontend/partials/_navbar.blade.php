@@ -30,14 +30,13 @@
                       <div class="md-form my-0">
                           <input id="search" name="search" class="form-control mr-sm-2" type="text" placeholder="Search">
                       </div>
-{{--                      <button class="btn btn-outline-warning btn-md my-2 my-sm-0 ml-3" type="submit">Search</button>--}}
                   </form>
                   <div id="result" class="panel panel-default" style="width:250px; position:absolute; top:55px; z-index:1; display:none">
                       <ul  style="margin-top:10px; list-style-type:none;" id="usersList">
 
                       </ul>
                   </div>
-                <li class="nav-item dropdown">
+                <li  class="nav-item dropdown">
                     <a id="navbarNotification" class="nav-link dropdown-toggle mt-1" href="#" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="#">
                         @if(auth()->user()->unreadNotifications->count())
@@ -48,13 +47,17 @@
                         @endif
                     </a>
 
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarNotification">
+                    <div  class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarNotification">
                         @foreach(auth()->user()->unreadNotifications as $n)
-
-                            <a href="{{route('markRead')}}" style="background-color: lightgray" class="dropdown-item">
+                            <a href="{{route('markRead')}}"  style="background-color: lightgray" class="dropdown-item">
                                 {{$n->data['data']}}
                             </a>
                         @endforeach
+                        @foreach(auth()->user()->readnotifications  as $n)
+                            <a href="{{route('markRead')}}"  class="dropdown-item">
+                                        {{$n->data['data']}}
+                             </a>
+                            @endforeach
                     </div>
                 </li>
                 <li class="nav-item">
@@ -65,7 +68,7 @@
                     <a href="{{url('/createPost')}}" class="nav-link">Post</a>
                  </li>
                  <li class="nav-item">
-                    <a class="nav-link" href="/profile/{{Auth::user()->username}}">Profile</a>
+                    <a class="nav-link" href="/myProfile/{{Auth::id()}}">Profile</a>
                   </li>
                   <li class="nav-item dropdown">
                       <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

@@ -14,43 +14,23 @@
                             {{$profile->name}}
                          </h5>
                          <h6>{{$profile->profile->bio}}</h6>
-
-{{--                        @if($profile->profile)--}}
-
-                        @if (Auth::user()->id == $profile->id)
-
-                        @else
-                            @if($existProfile)
-
-                                <button  id="accept" class="btn btn-primary " type="submit">Accept Follow</button>
-                                @else
-
-                                @if ($users)
-                                    <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-secondary" type="submit">Request Sent</button>
-                                @elseif((Auth::user()->following->contains($profile->id)))
-                                    <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-primary " type="submit">UnFollow </button>
-                                 @elseif($followBack)
-                                    <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary" type="submit">Follow Back </button>
-                                @elseif(!(Auth::user()->following->contains($profile->id)))
-                                    <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary" type="submit">Follow </button>
-                                @elseif($users)
-
-                                @endif
-
+                            @if(!(Auth::user()->profile->following->contains($profile->id)))
+                                <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary" type="submit">Follow </button>
+                            @endif
+                            @if($acceptFollow_request != null && $acceptFollow_request  == 0)
+                             <button  id="accept" class="btn btn-primary " type="submit">Accept Follow</button>
                             @endif
 
-                        @endif
+                            @if($status_ofFollowing == 1)
+                                <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-primary" type="submit">UnFollow</button>
+                                 @elseif($status_ofFollowing != null || $status_ofFollowing == 0)
+                                    <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-secondary" type="submit">Request Sent</button>
+                            @endif
 
                          <p class="proile-rating">Photos : <span>{{ $profile->post->count() }}</span>
                              Follower:<span>{{$profile->profile->followers->count()}}</span> Following
-                             <span> {{$profile->following->count()}} </span> </p>
+                                                     <span> {{$profile->profile->following->count()}} </span> </p>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    @if ($profile->id == Auth::user()->id)
-                        <a href = "{{route('profile.edit' , $profile->id)}} "  type="submit" class="profile-edit-btn" name="btnAddMore" >Edit Profile</a>
-                    @endif
-
                 </div>
             </div>
     </div>
@@ -58,7 +38,7 @@
     @toastr_js
     @toastr_render
 </main>
- @if ($profile->profile->is_public == 1 ||  (Auth::id() == $profile->id  &&  (!$users)))
+@if ($is_public || $status_ofFollowing == 1  )
 @if (count($posts) > 0)
 <section class="mt-1">
     <div class="wrapper">
@@ -100,9 +80,11 @@
 
         const followUser = (e) => {
 
-            axios.post(`/follow/${user_id}`)
+            axios.post(`/follow` , {
+                id:userId
+            })
             .then((result) => {
-                window.location.href = `/profile/${profile}`;
+                // window.location.href = `/profile/${profile}`;
                 console.log(result);
 
             }).catch((err) => {

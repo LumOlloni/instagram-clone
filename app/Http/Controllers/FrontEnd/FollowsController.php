@@ -10,33 +10,44 @@ use Illuminate\Support\Facades\Auth;
 
 class FollowsController extends Controller
 {
-    public function store(User $user)
-    {
-        if ($user->profile->is_public == 0) {
 
-            return auth()->user()->following()->attach($user->profile, ['status' => 0] , false);
+    protected $profile;
+    public function __construct(Profile $profile)
+    {
+        $this->profile = $profile;
+    }
+
+    public function store(Request $request)
+    {
+        $id = $request->get('id');
+
+        $user = Profile::where('id' , $id)->first();
+        $profile = Profile::where('id' , Auth::id())->first();
+
+        if ($user->is_public == 0) {
+
+            return $profile->following()->attach( $user->id, ['status' => 0] , false);
         }
 
-        else if($user->profile->is_public == 1){
+        else if($user->is_public == 1){
 
-            return auth()->user()->following()->attach($user->profile, ['status' => 1] , false);
+            return  $profile->following()->attach($id, ['status' => 1] , false);
         }
     }
 
     public function accept($id){
 
-        $p = Profile::where('id' ,Auth::id())->first();
+        $profile = Profile::where('id' , Auth::id())->first();
 
-        $p->followers()->updateExistingPivot($id , array('status' => 1) , false);
+        $profile->followers()->updateExistingPivot($id , array('status' => 1) , false);
 
-
-        return response()->json($p);
+        return response()->json($profile);
     }
-
-
 
     public function unFollow(User $user){
 
-        return auth()->user()->following()->detach($user->profile);
+        $p = $this->profile->AuthId();
+
+        return $p->following()->detach($user->profile);
     }
 }

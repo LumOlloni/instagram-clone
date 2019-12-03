@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Image;
 use App\Traits\ImageService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Profile extends Model
 {
@@ -27,8 +28,23 @@ class Profile extends Model
         return $this->belongsTo(Image::class, 'image_id');
     }
 
+    public function following()
+    {
+        return $this->belongsToMany('App\Models\Profile', 'followers', 'sender_id', 'accepter_id')
+            ->withPivot(['status']);
+
+    }
+
+    public function AuthId(){
+
+        $profile = Profile::where('id' ,Auth::id())->first();
+
+        return $profile;
+    }
+
     public function followers()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany('App\Models\Profile', 'followers', 'accepter_id', 'sender_id')
+            ->withPivot(['status']);
     }
 }

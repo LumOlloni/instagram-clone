@@ -81,50 +81,32 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $string = $request->bodyComment;
+        $arr = explode(" ", $string);
+        $str = '';
 
-        $first = $string[0];
+        foreach ($arr as $word){
 
-        if ($first == '@'){
-
-            $str = '';
-//            $sub = preg_split('/[, ]+/' , $a);
-
-            $sub = substr( $string, 1 );
-
-            $username = strtok($sub , " ");
-
+             if ($word[0] == '@'){
+                 $sub = substr( $word, 1 );
+                 $str = strtok($sub , " ");
+             }
+        }
             $comment = Comment::create([
-
                 'user_id' => $request->user_id,
                 'parent_id' => null,
                 'body' =>  $string ,
                 'post_id' => $request->post_id
             ]);
+
             $post = Post::find($request->post_id);
 
-            $user = User::where('username' , $username)->first();
+            $user = User::where('username' , $str)->first();
 
-            $user->notify(new UserNotification($post,$comment , Auth::user()));
+            if ($user != null){
+                $user->notify(new UserNotification($post,$comment , Auth::user()));
+            }
 
             return response()->json($user);
-        }
-        else {
-
-            $comment = Comment::create([
-
-                'user_id' => $request->user_id,
-                'parent_id' => null,
-                'body' =>  $string ,
-                'post_id' => $request->post_id
-            ]);
-            return \response()->json($comment);
-
-        }
-
-//
-
-
-//        return response()->json($first);
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\FrontEnd;
 
 
+use App\Jobs\ReadNotification;
+use App\Models\Profile;
 use App\Models\Tag;
 use App\Models\Like;
 use App\Models\Post;
@@ -34,8 +36,8 @@ class PostController extends Controller
 
 
     public function fetchPost(Request $request){
-
-        $users = auth()->user()->following()
+        $profile = Profile::find(Auth::id());
+        $users = $profile->following()
         ->where('status' , 1)
         ->pluck('profiles.id');
 
@@ -90,7 +92,7 @@ class PostController extends Controller
 
             // for save original image
             $ImageUpload = Img::make($files);
-            $originalPath = public_path('/storage/post_image/');
+                $originalPath = public_path('/storage/post_image/');
             $ImageUpload->resize(340, 340);
 
             $ImageUpload->save($originalPath . time() . $files->getClientOriginalName());
@@ -127,10 +129,8 @@ class PostController extends Controller
     public function like(Request $request)
     {
 
-        // $count = 0;
         $post_id = $request->post_id;
-//        $isLike = $request->isLike === 'true';
-//        $update = false;
+
         $post = Post::find($post_id);
 
         if (!$post) {
@@ -151,22 +151,12 @@ class PostController extends Controller
         } else {
             $like = new Like;
         }
-        // $like = new Like;
-//        $like->like = $isLike;
+
+
         $like->user_id = $user->id;
         $like->post_id = $post->id;
         $like->save();
 
-
-//        if ($update) {
-//            $like->update();
-//        }
-//        else {
-//            $like->save();
-//        }
-
-
-        // return response()->json($like);
         return null;
     }
 
@@ -231,9 +221,11 @@ class PostController extends Controller
 
     public function readNotification()
     {
-         auth()->user()->unreadNotifications->markAsRead();
+//        $job = new ReadNotification();
+//        dispatchNow($job);
+        ReadNotification::dispatchNow();
 
-         return redirect()->back();
+        return redirect()->back();
     }
 
     /**

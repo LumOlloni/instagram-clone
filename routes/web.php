@@ -22,8 +22,9 @@ Route::post('/commentStore' , 'FrontEnd\CommentController@storePost');
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/profile/{name}', 'HomeController@profile')->name('profile');
+    Route::get('/myProfile/{id}' , "HomeController@myProfile");
     Route::post('/fetchPost' , 'FrontEnd\PostController@fetchPost');
-    Route::post('follow/{user}' , 'FrontEnd\FollowsController@store') ;
+    Route::post('/follow' , 'FrontEnd\FollowsController@store') ;
     Route::get('markAsRead' , 'FrontEnd\PostController@readNotification')->name('markRead');
     Route::post('unfollow/{user}' , 'FrontEnd\FollowsController@unFollow');
     Route::post('/accept/{id}' , 'FrontEnd\FollowsController@accept');
