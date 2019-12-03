@@ -126,6 +126,21 @@ class PostController extends Controller
         return redirect()->back();
     }
 
+    public function explorer(){
+
+        $explorer_query = Profile::with(['user' => function($q)  {
+            $q->with(['post' => function($post) {
+                $post->with(['images' => function($image) {
+                    $image->where('section' , 'post');
+                }]);
+            }]);
+        }])->where('is_public' , 1)
+        ->where('id' , '!=' , Auth::id())
+        ->get();
+//        dd($explorer_query);
+        return view('frontend.template.explorer')->with('explorer_query' , $explorer_query);
+    }
+
     public function like(Request $request)
     {
 

@@ -64,9 +64,11 @@
                     <a href="{{route('post.index')}}" class="nav-link">Home</a>
                  </li>
                  <li class="nav-item">
-                    {{-- <a href="{{route('post.create')}}" class="nav-link">Post</a> --}}
                     <a href="{{url('/createPost')}}" class="nav-link">Post</a>
                  </li>
+                  <li class="nav-item">
+                      <a href="{{url('/explorer')}}" class="nav-link">Explorer</a>
+                  </li>
                  <li class="nav-item">
                     <a class="nav-link" href="/myProfile/{{Auth::id()}}">Profile</a>
                   </li>

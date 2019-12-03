@@ -85,55 +85,6 @@ class HomeController extends Controller
             ->with('posts', $posts);
     }
 
-//    public function profile2($username)
-//    {
-//
-//        $profile = User::where('username', $username)->first();
-//
-//
-//        $posts = Post::with('images')
-//        ->whereHas('images' , function($q){
-//            $q->where('section' , 'post');
-//        })
-//        ->where('user_id' , $profile->id)->get();
-//
-//
-//        $id = $profile->id;
-//        $auth = Auth::id();
-//
-//
-//        $existProfile = Profile::where('id',  Auth::id())->whereHas('followers', function ($q) use ($id) {
-//            $q->where('user_id', $id );
-//            $q->where('status' , 0);
-//
-//        })->exists();
-//
-//        $checkProfile = Profile::where('id', $id )->where('is_public' , 0)->whereHas('followers', function ($q) use ($id) {
-//            $q->where('user_id', $id );
-//            $q->where('status' , 0);
-//
-//        })->exists();
-//
-//
-//        $followBack = Profile::where('id', $auth )->whereHas('followers', function ($q) use ($id) {
-//            $q->where('user_id', $id );
-//            $q->where('status' , 1);
-//
-//        })->exists();
-//
-//
-//
-//
-//        $users = Profile::where('id' ,  $id)->whereHas('followers' , function ($q) use ($auth){
-//            $q->where('user_id' , $auth);
-//            $q->where('status' , 0);
-//        })
-//        ->exists();
-//
-//
-//        return view('frontend.template.profile')->with(['profile' => $profile
-//        , 'users' => $users , 'posts' => $posts , 'existProfile' => $existProfile , 'checkProfile' => $checkProfile , 'followBack' => $followBack] );
-//    }
 
     public function search(Request $request)
     {
@@ -157,8 +108,16 @@ class HomeController extends Controller
 
         $profile = Profile::where('id' , $id)->first();
 
+        $posts = Post::with('images')
+            ->whereHas('images' , function($q){
+                $q->where('section' , 'post');
+            })
+            ->where('user_id' , $profile->id)->get();
+
         if ($profile->id == Auth::id()){
-            return view('frontend.template.myProfile')->with('profile' , $profile);
+            return view('frontend.template.myProfile')
+                ->with('posts' , $posts)
+                ->with('profile' , $profile);
         }
         else {
             abort(403, 'Something went wrong');

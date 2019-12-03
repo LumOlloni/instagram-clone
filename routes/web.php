@@ -23,6 +23,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/profile/{name}', 'HomeController@profile')->name('profile');
     Route::get('/myProfile/{id}' , "HomeController@myProfile");
+    Route::get('/explorer' , 'FrontEnd\PostController@explorer');
     Route::post('/fetchPost' , 'FrontEnd\PostController@fetchPost');
     Route::post('/follow' , 'FrontEnd\FollowsController@store') ;
     Route::get('markAsRead' , 'FrontEnd\PostController@readNotification')->name('markRead');
