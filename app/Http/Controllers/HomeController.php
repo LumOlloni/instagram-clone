@@ -45,22 +45,22 @@ class HomeController extends Controller
         })
         ->first();
 
-
-
             if ($users_following != null){
                 $status_ofFollowing = $users_following->following[0]->pivot->status;
+//                dd($status_ofFollowing);
             }
             else {
                 $status_ofFollowing  = null;
             }
 
-        $acceptFollow = Profile::where('id' ,   $my_id)->with('followers')->whereHas('followers' , function ($q) use ($profile){
+
+        $acceptFollow = Profile::where('id' ,   Auth::id())->with('followers')->whereHas('followers' , function ($q) use ($profile){
             $q->where('accepter_id' , Auth::id());
+            $q->where('sender_id' , $profile->id);
         })->first();
 
          if ($acceptFollow != null){
              $acceptFollow_request = $acceptFollow->followers[0]->pivot->status;
-//            dd($acceptFollow_request);
          }
          else {
              $acceptFollow_request = null;

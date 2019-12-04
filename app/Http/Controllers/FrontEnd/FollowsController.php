@@ -44,10 +44,14 @@ class FollowsController extends Controller
         return response()->json($profile);
     }
 
-    public function unFollow(User $user){
+    public function unFollow(Request $request){
 
-        $p = $this->profile->AuthId();
+        $id = $request->get('id');
 
-        return $p->following()->detach($user->profile);
+        $user = Profile::where('id' , $id)->first();
+        $profile = Profile::where('id' , Auth::id())->first();
+
+
+        return $profile->following()->detach($user->id) ? "success" :  $profile->followers()->updateExistingPivot($id , array('status' => 0) , false);
     }
 }

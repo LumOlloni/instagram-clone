@@ -137,6 +137,7 @@ class PostController extends Controller
         }])->where('is_public' , 1)
         ->where('id' , '!=' , Auth::id())
         ->get();
+
 //        dd($explorer_query);
         return view('frontend.template.explorer')->with('explorer_query' , $explorer_query);
     }

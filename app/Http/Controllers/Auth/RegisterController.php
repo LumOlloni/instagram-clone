@@ -86,7 +86,6 @@ class RegisterController extends Controller
 
     protected function redirectTo()
     {
-        $userName = Auth::user()->username;
-        return route('profile', $userName);
+        return route('post.index');
     }
 }
