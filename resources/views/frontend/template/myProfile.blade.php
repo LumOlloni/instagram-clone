@@ -45,3 +45,6 @@
         <h2 class="text-danger text-center">No Post Here</h2>
     @endif
 @endsection
+@section('scripts')
+
+@endsection

@@ -64,7 +64,7 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-       
+
         $profile = Profile::find($id);
 
         if ($profile->id == Auth::user()->id) {
@@ -73,10 +73,10 @@ class ProfileController extends Controller
         else {
             return abort('403');
         }
-     
 
-       
-      
+
+
+
     }
 
     /**
@@ -103,7 +103,10 @@ class ProfileController extends Controller
             $profile->user->email = $request->input('email');
             $profile->push();
 
+            toastr()->success('Profile Updated Succefully');
+
             return redirect()->back();
+
         } else if ($profile->image_id != 1) {
 
             $profile->bio = $request->input('bio');
@@ -112,6 +115,8 @@ class ProfileController extends Controller
             $profile->user->username = $request->input('username');
             $profile->user->email = $request->input('email');
             $profile->push();
+
+            toastr()->success('Profile Updated Succefully');
 
             return redirect()->back();
         }

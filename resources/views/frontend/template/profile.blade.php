@@ -16,20 +16,20 @@
                          <h6>{{$profile->profile->bio}}</h6>
                             @if($acceptFollow == null && $status_ofFollowing == null )
                                 <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary" type="submit">Follow </button>
-                           @endif
+                            @endif
 
                             @if( $acceptFollow_request  == 0 && $acceptFollow_request !== null)
                                 <button  id="accept" class="btn btn-primary " type="submit">Accept Follow</button>
-                                @elseif(!($status_ofFollowing) && $acceptFollow_request != null && !($users))
-                                    <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary" type="submit">Follow Back </button>
+                            @elseif(!($status_ofFollowing) && $acceptFollow_request != null && !($users))
+                                <button data-id="{{$profile->id}}" id="follow" class="btn btn-primary" type="submit">Follow Back </button>
                             @endif
                             @if($status_ofFollowing === 1 && $profile->is_public == true)
                                 <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-primary" type="submit">UnFollow</button>
                             @endif
-                            @if($status_ofFollowing === 1 && $acceptFollow_request===1 )
+                            @if($status_ofFollowing === 1 && $acceptFollow_request === 1 )
                                 <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-primary" type="submit">UnFollow</button>
-                                 @elseif( $users != null &&  $status_ofFollowing == 0)
-                                    <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-secondary" type="submit">Request Sent</button>
+                            @elseif( $users != null &&  $status_ofFollowing == 0)
+                                <button data-id="{{$profile->id}}" id="unFollow" class="btn btn-secondary" type="submit">Request Sent</button>
                             @endif
 
                          <p class="proile-rating">Photos : <span>{{ $profile->post->count() }}</span>

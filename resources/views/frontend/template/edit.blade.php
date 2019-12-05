@@ -1,5 +1,7 @@
 @extends('frontend.layouts.app')
-
+@section('style')
+    @toastr_css
+@endsection
 @section('content')
 
 <main class="py-4">
@@ -22,14 +24,14 @@
                                     <h5>
                                        {{Auth::user()->name}}
                                     </h5>
-                                    <h6>{{Auth::user()->profile->images->bio}}</h6> 
+                                    <h6>{{Auth::user()->profile->images->bio}}</h6>
                                     <p class="proile-rating">
                                     <label for="" class="mb-2">Name</label>
                                     <input class="form-control w-50" value="{{$profile->user->name}}" name="name"  type="text"> </p>
-                                    <p class="proile-rating"> 
+                                    <p class="proile-rating">
                                         <label for="" class="mb-2">Username</label>
                                      <input class="form-control w-50" value=" {{$profile->user->username}} " name="username" type="text"> </p>
-                                    <p class="proile-rating"> 
+                                    <p class="proile-rating">
                                     <label for="" class="mb-2">Email</label>
                                     <input class="form-control w-50" value=" {{$profile->user->email}} " name="email" type="text"> </p>
                                     <p class="proile-rating">
@@ -41,11 +43,11 @@
                         <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Your Profile"/>
                     </div>
                 </div>
-            </form>           
+            </form>
         </div>
         @jquery
         @toastr_js
-        @toastr_render 
+        @toastr_render
     </main>
 @endsection
 @section('scripts')
@@ -55,6 +57,6 @@
                 toastr.error("{{ $error }}");
             @endforeach
         @endif
-    
+
     </script>
 @endsection

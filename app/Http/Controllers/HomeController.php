@@ -44,9 +44,9 @@ class HomeController extends Controller
 //                ->where('status' , 1);
         })
         ->first();
-
             if ($users_following != null){
                 $status_ofFollowing = $users_following->following[0]->pivot->status;
+
 //                dd($status_ofFollowing);
             }
             else {

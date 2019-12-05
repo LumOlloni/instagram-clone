@@ -58,18 +58,6 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-//    public function store(Request $request)
-//    {
-//
-//        $comment = Comment::create([
-//            'user_id' => $request->user_id,
-//            'parent_id' => null,
-//            'body' => $request->bodyComment,
-//            'post_id' => $request->post_id
-//        ]);
-//
-//        return response()->json($comment);
-//    }
 
     public function replayedComment($id)
     {
@@ -83,30 +71,34 @@ class CommentController extends Controller
         $string = $request->bodyComment;
         $arr = explode(" ", $string);
         $str = '';
+        $stringArr = array();
 
-        foreach ($arr as $word){
-
-             if ($word[0] == '@'){
-                 $sub = substr( $word, 1 );
-                 $str = strtok($sub , " ");
-             }
-        }
-            $comment = Comment::create([
-                'user_id' => $request->user_id,
-                'parent_id' => null,
-                'body' =>  $string ,
-                'post_id' => $request->post_id
-            ]);
-
-            $post = Post::find($request->post_id);
-
-            $user = User::where('username' , $str)->first();
-
-            if ($user != null){
-                $user->notify(new UserNotification($post,$comment , Auth::user()));
+        foreach ($arr as $word) {
+            $temp = $word;
+            if ($word[0] == '@') {
+                $temp = substr($word, 1);
             }
 
-            return response()->json($user);
+            $stringArr [] = $temp;
+        }
+
+        $comment = Comment::create([
+            'user_id' => $request->user_id,
+            'parent_id' => null,
+            'body' =>  $string ,
+            'post_id' => $request->post_id
+        ]);
+
+        foreach ($stringArr as $username) {
+
+            $post = Post::find($request->post_id);
+            $user = User::where('username', $username)->first();
+            if ($user != null) {
+                $user->notify(new UserNotification($post, $comment, Auth::user()));
+            }
+        }
+        return response()->json($comment);
+
     }
 
     /**

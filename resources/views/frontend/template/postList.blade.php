@@ -3,7 +3,7 @@
       @forelse ($post as $item)
 
           <div class="card-group">
-                  <div  class="card mt-4 col-md-4 mx-auto">
+                  <div  class="card mt-3 col-md-6 mx-auto">
 
                       <a id="id" class="openModal" data-id="{{$item->id}}"><img  class="card-img-top" src="/storage/post_image/{{$item->images->path}}">
                       </a>

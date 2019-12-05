@@ -37,25 +37,26 @@
                       </ul>
                   </div>
                 <li  class="nav-item dropdown">
-                    <a id="navbarNotification" class="nav-link dropdown-toggle mt-1" href="#" role="button"
+                    <a id="drop" id="navbarNotification" class="nav-link dropdown-toggle mt-1"  role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="#">
                         @if(auth()->user()->unreadNotifications->count())
-                            <span class="badge badge-danger">{{auth()->user()->unreadNotifications->count()}}</span>
+                            <span id="spanNotification" class="badge badge-danger">{{auth()->user()->unreadNotifications->count()}}</span>
                             <i class="fas fa-bell fa-lg  mr-1"></i>
                             @else
                                 <i class="fas fa-bell fa-lg  mr-1"></i>
                         @endif
                     </a>
 
-                    <div  class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarNotification">
+                    <div   class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarNotification">
+{{--            href="{{route('markRead')}}"            --}}
                         @foreach(auth()->user()->unreadNotifications as $n)
-                            <a href="{{route('markRead')}}"  style="background-color: lightgray" class="dropdown-item">
-                                {{$n->data['data']}}
+                            <a  href="/profile/{{$n->data['action']}}"  id="unreadNotification"  style="background-color: lightgray" class="dropdown-item">
+                                {{$n->data['message']}}
                             </a>
                         @endforeach
                         @foreach(auth()->user()->readnotifications  as $n)
-                            <a href="{{route('markRead')}}"  class="dropdown-item">
-                                        {{$n->data['data']}}
+                            <a href="/profile/{{$n->data['action']}}"  class="dropdown-item notification">
+                                {{$n->data['message']}}
                              </a>
                             @endforeach
                     </div>

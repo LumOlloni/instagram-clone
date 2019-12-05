@@ -237,11 +237,9 @@ class PostController extends Controller
 
     public function readNotification()
     {
-//        $job = new ReadNotification();
-//        dispatchNow($job);
         ReadNotification::dispatchNow();
 
-        return redirect()->back();
+        return response()->json('Success');
     }
 
     /**
