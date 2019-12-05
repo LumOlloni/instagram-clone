@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Image;
 use App\Traits\ImageService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 
 class Profile extends Model

@@ -129,8 +129,11 @@ class PostController extends Controller
     public function explorer(){
 
         $explorer_query = Post::inRandomOrder()->whereHas('user.profile' , function ($q){
-            $q->where('is_public' , 1);
-        })->where('user_id' , '!=' , Auth::id())
+                $q->whereDoesntHave('followers')
+                    ->whereDoesntHave('following')
+                    ->where('is_public' , 1);
+            })
+            ->where('user_id' , '!=' , Auth::id())
             ->with('images')
         ->paginate(10);
 
