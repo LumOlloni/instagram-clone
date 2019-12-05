@@ -2,6 +2,29 @@
 
     $(document).ready(function () {
 
+        $('#drop').click(function () {
+            const span = document.getElementById('spanNotification');
+            const unRead = document.getElementById('unreadNotification');
+            $.ajax({
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{!! route('markRead')!!}",
+                cache: false,
+
+                success: function (data) {
+                    if (span) {
+                        span.style.display = 'none';
+                    }
+                    if (unRead) {
+                        unRead.style.background = '#fff';
+                    }
+                    console.log(data);
+                }
+            })
+        });
+
         $('.openModal').click(function(e){
 
             const tags = document.querySelectorAll('.tags');

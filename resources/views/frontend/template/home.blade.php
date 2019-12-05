@@ -111,7 +111,7 @@
             load_data(limit ,  start);
           },1000);
         }
-});
+        });
     });
 
     </script>
