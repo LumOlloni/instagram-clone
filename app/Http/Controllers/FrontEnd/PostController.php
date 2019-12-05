@@ -54,7 +54,7 @@ class PostController extends Controller
 
         public function postModal($id)
         {
-            $post = Post::with(['images', 'user', 'tags', 'comments'])->where('id', $id)
+            $post = Post::with(['images', 'user.profile.images', 'tags', 'comments'])->where('id', $id)
                 ->first();
 
             return response()->json($post);

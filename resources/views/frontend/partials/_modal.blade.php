@@ -4,8 +4,9 @@
     <div class="modal-dialog" id="modal-width" role="document">
       <div class="modal-content" id="modal-content">
         <div class="modal-header">
-
-          <h5 class="text-center modal-title" id="exampleModalLabel"></h5>
+{{--  src="https://picsum.photos/id/347/200/200" --}}
+            <img id="avatar" style="width: 75px; height: 75px" class="img-thumbnail rounded-circle" alt="">
+             <h5 class="text-right ml-4 mt-4 modal-title" id="exampleModalLabel"></h5>
             <a style="display: none;" id="edit_button" class="btn btn-warning mx-auto">Edit Post</a>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>

@@ -33,17 +33,24 @@ class HomeController extends Controller
 
         $my_id = Auth::id();
 
-        if($profile->profile->is_public == true) {
-            $is_public = true;
-        } else {
-            $is_public = false;
-        }
 
-        $users_following = Profile::where('id' ,   $my_id)->with('following')->whereHas('following' , function ($q) use ($profile){
-            $q->where('accepter_id' , $profile->id);
+        if (Auth::user()->username == $profile->username)
+        {
+            return redirect()->back();
+        }
+        else {
+
+            if($profile->profile->is_public == true) {
+                $is_public = true;
+            } else {
+                $is_public = false;
+            }
+
+            $users_following = Profile::where('id' ,   $my_id)->with('following')->whereHas('following' , function ($q) use ($profile){
+                $q->where('accepter_id' , $profile->id);
 //                ->where('status' , 1);
-        })
-        ->first();
+            })
+                ->first();
             if ($users_following != null){
                 $status_ofFollowing = $users_following->following[0]->pivot->status;
 
@@ -54,35 +61,38 @@ class HomeController extends Controller
             }
 
 
-        $acceptFollow = Profile::where('id' ,   Auth::id())->with('followers')->whereHas('followers' , function ($q) use ($profile){
-            $q->where('accepter_id' , Auth::id());
-            $q->where('sender_id' , $profile->id);
-        })->first();
+            $acceptFollow = Profile::where('id' ,   Auth::id())->with('followers')->whereHas('followers' , function ($q) use ($profile){
+                $q->where('accepter_id' , Auth::id());
+                $q->where('sender_id' , $profile->id);
+            })->first();
 
-         if ($acceptFollow != null){
-             $acceptFollow_request = $acceptFollow->followers[0]->pivot->status;
-         }
-         else {
-             $acceptFollow_request = null;
-         }
-
-
-
-        $posts = Post::with('images')
-        ->whereHas('images' , function($q){
-            $q->where('section' , 'post');
-        })
-        ->where('user_id' , $profile->id)->get();
+            if ($acceptFollow != null){
+                $acceptFollow_request = $acceptFollow->followers[0]->pivot->status;
+            }
+            else {
+                $acceptFollow_request = null;
+            }
 
 
-        return view('frontend.template.profile')
-            ->with('profile', $profile)
-            ->with('is_public', $is_public)
-            ->with('acceptFollow_request' , $acceptFollow_request)
-            ->with('status_ofFollowing',$status_ofFollowing)
-            ->with('users' , $users_following )
-            ->with('acceptFollow' , $acceptFollow)
-            ->with('posts', $posts);
+
+            $posts = Post::with('images')
+                ->whereHas('images' , function($q){
+                    $q->where('section' , 'post');
+                })
+                ->where('user_id' , $profile->id)->get();
+
+
+            return view('frontend.template.profile')
+                ->with('profile', $profile)
+                ->with('is_public', $is_public)
+                ->with('acceptFollow_request' , $acceptFollow_request)
+                ->with('status_ofFollowing',$status_ofFollowing)
+                ->with('users' , $users_following )
+                ->with('acceptFollow' , $acceptFollow)
+                ->with('posts', $posts);
+        }
+
+
     }
 
 

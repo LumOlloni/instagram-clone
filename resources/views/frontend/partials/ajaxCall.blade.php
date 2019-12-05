@@ -30,6 +30,7 @@
             const tags = document.querySelectorAll('.tags');
             const user = '{!! Auth::id() !!}';
             const edit = document.getElementById('editButton');
+            const avatar = document.getElementById('avatar');
 
             var post_id = $(this).data('id');
 
@@ -52,6 +53,14 @@
 
                     }
                     const user_post = data.user_id;
+                    const userName = data.user.username;
+
+                    const image_user = data.user.profile.images.path;
+                    avatar.setAttribute('src' , `/storage/image_users/${image_user}`);
+                    avatar.style.cursor = "pointer";
+                    avatar.addEventListener('click' , function () {
+                        window.location.href = `/profile/${userName}`;
+                    });
 
                     console.log(data);
                     $('.modal-title').html(data.description);
