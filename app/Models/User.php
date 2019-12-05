@@ -61,23 +61,4 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Profile', 'id');
     }
 
-    // public function tagUserName($tag)
-    // {
-    //     $user = User::all();
-
-    //     $username = ['lummche'];
-    //     $array = [];
-
-    //     foreach ($user as $key) {
-    //         $array = [$key->username];
-    //         if (in_array($username,  $array)) {
-    //             // if ('qendro' == $key->username) {
-    //             // return true;
-    //             // dd("Success");
-    //         } else {
-    //             // return false;
-    //             dd("Error");
-    //         }
-    //     }
-    // }
 }

@@ -128,17 +128,12 @@ class PostController extends Controller
 
     public function explorer(){
 
-        $explorer_query = Profile::with(['user' => function($q)  {
-            $q->with(['post' => function($post) {
-                $post->with(['images' => function($image) {
-                    $image->where('section' , 'post');
-                }]);
-            }]);
-        }])->where('is_public' , 1)
-        ->where('id' , '!=' , Auth::id())
-        ->get();
+        $explorer_query = Post::inRandomOrder()->whereHas('user.profile' , function ($q){
+            $q->where('is_public' , 1);
+        })->where('user_id' , '!=' , Auth::id())
+            ->with('images')
+        ->paginate(10);
 
-//        dd($explorer_query);
         return view('frontend.template.explorer')->with('explorer_query' , $explorer_query);
     }
 

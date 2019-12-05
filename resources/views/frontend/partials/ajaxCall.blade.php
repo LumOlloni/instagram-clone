@@ -28,6 +28,7 @@
                         document.getElementById('edit_button').href = `/post/${post_id}/edit`;
 
                     }
+                    const user_post = data.user_id;
 
                     console.log(data);
                     $('.modal-title').html(data.description);
@@ -39,7 +40,7 @@
                     });
                     data.comments.forEach(element => {
 
-                        const bool = (element.user_id == user);
+                        const bool = (element.user_id == user || user_post == user );
                         console.log(bool);
 
                         let deleteBtn = (bool ? ` <div class="col-md-3">
