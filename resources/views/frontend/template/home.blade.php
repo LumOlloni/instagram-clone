@@ -33,58 +33,56 @@
 
     $(document).ready(function(){
 
-        function unReadNotification() {
-            let span = document.querySelector('.unRead');
-            $.ajax({
-                type:'GET',
-                url:'/unReadNotification',
-                success: function (data) {
-                    console.log(data);
-                    if (data.length >= 1){
-                        for (let i = 0;i < data.length;i++){
-                            if (span != null){
-                                span.innerText = `${data.length}`;
-                            }
-                            $('#notification').append(`<a href="/profile/${data[i].action}"
-                               id="unreadNotification"  style="background-color: lightgray" class="dropdown-item">${data[i].message}</a>`);
-                        }
-                    }else if(data.length === 0) {
-                        // $('#notification').remove();
-                    }
-
-
-                },
-            });
-        }
-
-        function readNotification() {
-            $.ajax({
-                type:'GET',
-                url:'/readNotification',
-                success: function (data) {
-                    console.log(data);
-                    if (data.length >= 1){
-                        for (let i = 0;i < data.length;i++){
-                            $('#readNotifcation').append(`<a href="/profile/${data[i].action}"
-                               id="unreadNotification"  style="background-color: white" class="dropdown-item">${data[i].message}</a>`);
-                        }
-                        }else if(data.length === 0) {
-                            $('#readNotifcation').remove();
-                        }
-                },
-            });
-        }
-
-
-
-        $(window).on('load', function() {
-
-            readNotification();
-
-        });
-        setInterval(function () {
-            unReadNotification();
-        },5000);
+        // function unReadNotification() {
+        //     let span = document.querySelector('.unRead');
+        //     $.ajax({
+        //         type:'GET',
+        //         url:'/unReadNotification',
+        //         success: function (data) {
+        //             console.log(data);
+        //             if (data.length >= 1){
+        //                 for (let i = 0;i < data.length;i++){
+        //                     if (span != null){
+        //                         span.innerText = `${data.length}`;
+        //                     }
+        //                     $('#notification').append(`<a href="/profile/${data[i].action}"
+        //                        id="unreadNotification"  style="background-color: lightgray" class="dropdown-item">${data[i].message}</a>`);
+        //                 }
+        //             }else if(data.length === 0) {
+        //                 // $('#notification').remove();
+        //             }
+        //
+        //
+        //         },
+        //     });
+        // }
+        //
+        // function readNotification() {
+        //     $.ajax({
+        //         type:'GET',
+        //         url:'/readNotification',
+        //         success: function (data) {
+        //             console.log(data);
+        //             if (data.length >= 1){
+        //                 for (let i = 0;i < data.length;i++){
+        //                     $('#readNotifcation').append(`<a href="/profile/${data[i].action}"
+        //                        id="unreadNotification"  style="background-color: white" class="dropdown-item">${data[i].message}</a>`);
+        //                 }
+        //                 }else if(data.length === 0) {
+        //                     $('#readNotifcation').remove();
+        //                 }
+        //         },
+        //     });
+        // }
+        //
+        // $(window).on('load', function() {
+        //
+        //     readNotification();
+        //
+        // });
+        // setInterval(function () {
+        //     unReadNotification();
+        // },5000);
 
         var limit = 5;
         var start = 0;

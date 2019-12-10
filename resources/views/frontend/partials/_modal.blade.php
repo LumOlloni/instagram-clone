@@ -20,12 +20,12 @@
             </div>
           </ul>
           <form class=" form-inline ml-5">
-            <div class="form-group mx-sm-3 mb-2">
-                <input type="text" class="form-control" id="bodyComment" placeholder="Enter Comment">
+            <div class="form-group mx-sm-3 mb-2 ">
+                <input  type="text"  id="bodyComment" placeholder="Enter Comment">
             </div>
             {{-- <ul class="list-group ulList">
             </ul> --}}
-            <button type="submit" class="comment btn btn-primary mb-2">Save</button>
+            <button  class="comment btn btn-primary mb-3">Save</button>
           </form>
             <ul class="list-group ">
               <div class="container">
