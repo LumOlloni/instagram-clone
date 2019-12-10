@@ -4,13 +4,10 @@
     <main class="py-4">
         <div class="container emp-profile">
             <div class="row">
-
                 <div class="col-md-4">
-
                     <div class="profile-img">
                         <img src="/storage/image_users/{{$profile->images->path}}" alt=""/>
                     </div>
-
                 </div>
                 <div class="col-md-6">
                     <div class="profile-head">

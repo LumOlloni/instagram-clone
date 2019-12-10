@@ -1,4 +1,8 @@
 let post = 0;
+const disLike = document.createElement('div');
+disLike.innerHTML = '<i class="fas fa-heart text-danger"></i>';
+const like = document.createElement('div');
+like.innerHTML = '<i class="fas fa-heart text-white"></i>';
 
 $('.like').on('click', function (event) {
 
@@ -18,9 +22,7 @@ $('.like').on('click', function (event) {
       },
   })
   .done(function () {
-      event.target.innerText = isLike ? event.target.innerText == 'Like' ? 'Dislike' : 'Like':'Dislike' ;
+      event.target.innerText = isLike ? event.target.innerHTML ==  "Like" ?  'Dislike' :  'Like': 'Dislike';
   })
-
     event.preventDefault();
-
 })

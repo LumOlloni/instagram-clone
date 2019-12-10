@@ -95,6 +95,12 @@ class HomeController extends Controller
 
     }
 
+    public function loadUnReadNotification(){
+
+        return view('frontend.template.unreadNotification');
+
+    }
+
 
     public function search(Request $request)
     {

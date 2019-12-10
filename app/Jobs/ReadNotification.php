@@ -32,6 +32,7 @@ class ReadNotification implements ShouldQueue
     public function handle()
     {
         $user = User::find(Auth::id());
+
         $user->unreadNotifications->markAsRead();
     }
 }

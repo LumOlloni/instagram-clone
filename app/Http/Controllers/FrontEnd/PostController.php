@@ -31,34 +31,35 @@ class PostController extends Controller
         return view('frontend.template.home');
     }
 
-
-
-
-
     public function fetchPost(Request $request){
+
         $profile = Profile::find(Auth::id());
+
         $users = $profile->following()
-        ->where('status' , 1)
-        ->pluck('profiles.id');
+            ->where('status' , 1)
+            ->pluck('profiles.id');
 
         $limit = $request->get('limit');
 
         $start = $request->get('start');
 
-        $post = Post::whereIn('user_id' , $users)->with(['images','likes' ,'user'])->offset($start)->limit($limit)->get();
+        $post = Post::whereIn('user_id' , $users)->with(['images','likes' ,'user.profile.images'])->offset($start)->limit($limit)->get();
 
+        $dislike = '<i class="fas fa-heart text-danger"></i>';
 
-        return view('frontend.template.postList' , compact('post'));
+        $like = '<i class="fas fa-heart "></i>';
+
+        return view('frontend.template.postList' , compact('post' , 'dislike' , 'like' ));
 
         }
 
-        public function postModal($id)
-        {
-            $post = Post::with(['images', 'user.profile.images', 'tags', 'comments'])->where('id', $id)
-                ->first();
+    public function postModal($id)
+    {
+        $post = Post::with(['images', 'user.profile.images', 'tags', 'comments'])->where('id', $id)
+            ->first();
 
-            return response()->json($post);
-        }
+        return response()->json($post);
+    }
 
 
     /**
@@ -110,7 +111,6 @@ class PostController extends Controller
             'section' => 'post',
         ]);
 
-
         $post = Post::create([
             'image_id' => $img->id,
             'description' => $request->description,
@@ -129,13 +129,13 @@ class PostController extends Controller
     public function explorer(){
 
         $explorer_query = Post::inRandomOrder()->whereHas('user.profile' , function ($q){
-                $q->whereDoesntHave('followers')
+                $q->whereDoesntHave('followers') // @Todo fix this
                     ->whereDoesntHave('following')
                     ->where('is_public' , 1);
             })
             ->where('user_id' , '!=' , Auth::id())
             ->with('images')
-        ->paginate(10);
+            ->paginate(10);
 
         return view('frontend.template.explorer')->with('explorer_query' , $explorer_query);
     }
@@ -156,20 +156,21 @@ class PostController extends Controller
         $like = Like::with('user')->where('post_id', $post_id)->first();
 
         if ($like) {
+            $like->delete();
 
-            $alreadyLike = $like;
-            if ($alreadyLike == $like) {
-                $like->delete();
-                return null;
-            }
-        } else {
-            $like = new Like;
+            return null;
         }
 
+        $like = new Like;
 
         $like->user_id = $user->id;
         $like->post_id = $post->id;
         $like->save();
+
+//        Like::create([
+//            'user_id'   => $user->id,
+//            'post_id'   => $post->id
+//        ]);
 
         return null;
     }
@@ -238,6 +239,32 @@ class PostController extends Controller
         ReadNotification::dispatchNow();
 
         return response()->json('Success');
+    }
+
+    public function unReadNotification(){
+
+        $user = User::find(Auth::id());
+
+        $notificationArray = array();
+
+        foreach ($user->unreadNotifications as $notification) {
+            $notificationArray [] = $notification->data;
+        }
+
+        return response()->json($notificationArray);
+    }
+
+    public function notifactionRead(){
+
+        $user = User::find(Auth::id());
+
+        $notificationArray = array();
+
+        foreach ($user->readnotifications as $notification) {
+            $notificationArray [] = $notification->data;
+        }
+
+        return response()->json($notificationArray);
     }
 
     /**

@@ -7,6 +7,7 @@
 @section('content')
 
   <main class="py-4">
+      <h1 class="fasfsa"></h1>
     <h2 class="text-center mt-4">Photo of Users</h2>
 
     @if (isset($message))
@@ -32,32 +33,62 @@
 
     $(document).ready(function(){
 
-        $('#drop').click(function () {
-            const span =   document.getElementById('spanNotification');
-            const unRead =   document.getElementById('unreadNotification');
+        function unReadNotification() {
+            let span = document.querySelector('.unRead');
             $.ajax({
-                type: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: "{!! route('markRead')!!}",
-                cache:false,
-
-                success:function (data) {
-                    if(span) {
-                        span.style.display = 'none';
-                    }
-                    if(unRead){
-                        unRead.style.background = '#fff';
-                    }
+                type:'GET',
+                url:'/unReadNotification',
+                success: function (data) {
                     console.log(data);
-                }
-            })
+                    if (data.length >= 1){
+                        for (let i = 0;i < data.length;i++){
+                            if (span != null){
+                                span.innerText = `${data.length}`;
+                            }
+                            $('#notification').append(`<a href="/profile/${data[i].action}"
+                               id="unreadNotification"  style="background-color: lightgray" class="dropdown-item">${data[i].message}</a>`);
+                        }
+                    }else if(data.length === 0) {
+                        // $('#notification').remove();
+                    }
+
+
+                },
+            });
+        }
+
+        function readNotification() {
+            $.ajax({
+                type:'GET',
+                url:'/readNotification',
+                success: function (data) {
+                    console.log(data);
+                    if (data.length >= 1){
+                        for (let i = 0;i < data.length;i++){
+                            $('#readNotifcation').append(`<a href="/profile/${data[i].action}"
+                               id="unreadNotification"  style="background-color: white" class="dropdown-item">${data[i].message}</a>`);
+                        }
+                        }else if(data.length === 0) {
+                            $('#readNotifcation').remove();
+                        }
+                },
+            });
+        }
+
+
+
+        $(window).on('load', function() {
+
+            readNotification();
 
         });
-      var limit = 5;
-      var start = 0;
-      var action = 'inactive';
+        setInterval(function () {
+            unReadNotification();
+        },5000);
+
+        var limit = 5;
+        var start = 0;
+        var action = 'inactive';
 
       function load_data(limit ,  start){
 
@@ -84,24 +115,23 @@
 
                      $('#load_data_message').html("<button type='submit' class='btn btn-warning'>No Data Found </button>");
                      action = 'active';
+
                     }
-                  else {
-                    $('#load_data_message').html("<button type='submit' class='btn btn-warning'>Please Wait ... </button>");
-                    action = 'inactive';
-                  }
+                  // else {
+                  //   $('#load_data_message').html("<button type='submit' class='btn btn-warning'>Please Wait ... </button>");
+                  //   action = 'inactive';
+                  // }
                 }
             });
       }
 
-
       if (action == 'inactive') {
-        action = 'active'
+        action = 'active';
         load_data(limit ,  start);
 
       }
 
       $(window).scroll(function () {
-
         if ($(window).scrollTop() + $(window).height() > $('#load_data').height() && action == 'inactive') {
 
           action = 'active';

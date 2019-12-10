@@ -3,6 +3,7 @@
     $(document).ready(function () {
 
         $('#drop').click(function () {
+            // alert('request');
             const span = document.getElementById('spanNotification');
             const unRead = document.getElementById('unreadNotification');
             $.ajax({
@@ -31,6 +32,7 @@
             const user = '{!! Auth::id() !!}';
             const edit = document.getElementById('editButton');
             const avatar = document.getElementById('avatar');
+            // const title = document.querySelector('.titlePost');
 
             var post_id = $(this).data('id');
 
@@ -63,7 +65,9 @@
                     });
 
                     console.log(data);
-                    $('.modal-title').html(data.description);
+                    $('.modal-title').html(data.user.name);
+                    $('.titlePost').html(data.description);
+
                     data.tags.forEach(element => {
                         arr += `<div>
                         <p class="ml-2 text-primary col-md-4 ">${element.name}</p>
@@ -168,7 +172,6 @@
 
                 if (bodyComment.value == '') {
                     toastr.error("Empty Body Comment");
-                    // console.log("Error ");
                 }
                 else {
                     let outPut = '';
@@ -187,34 +190,43 @@
 
                             toastr.success("Comment created Successfully");
                             console.log(data);
+                            const bool = (data.user_id == user);
+                            let text = data.body;
+                            let accordian = document.createElement('div');
+                            accordian.className = 'accordion';
+                            accordian.style.display = 'inline';
+                            accordian.id = 'accordionExample';
+                            const li_item = document.createElement('li');
 
-                            // const bool = (data.user_id == user);
-                            //
-                            // let deleteBtn = (bool ? ` <div class="col-md-3">
-                            //     <button onclick="myFunction(${data.id})" id="deleteBtn"  data-delete = "${data.id}"  class="mt-1 btn btn-danger deleteBtn">Delete</button>
-                            //  </div>` : '');
-                            //
-                            //
-                            //
-                            //
-                            // outPut += `<li data-replay="${data.id}"  class="replayedComment list-group-item col-md-9">${data.body}</li><div class="accordion" id="accordionExample">
-                            //       <div class="col-md-3 parentElement">
-                            //         <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
-                            //       </div>
-                            //         ${deleteBtn}
-                            //       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                            //           <div class="input-group mb-3">
-                            //               <input id="bodyReplay"  type="text" class="form-control replay" placeholder="Replay Comment">
-                            //               <div class="input-group-append">
-                            //                 <button data-comment="${data.id}" id="replayComment" type="submit" class="input-group-text replay  text-white bg-primary ">Save</button>
-                            //               </div>
-                            //             </div>
-                            //       </div>
-                            //   </div>`;
+                            li_item.className = 'replayedComment list-group-item col-md-9';
+                            // li_item.textContent = `${data.body}`;
+                            li_item.setAttribute('data-replay' , `${data.id}`);
 
+                            let deleteBtn = (bool ? ` <div class="col-md-3">
+                                <button onclick="myFunction(${data.id})" id="deleteBtn"  data-delete = "${data.id}"  class="mt-1 btn btn-danger deleteBtn">Delete</button>
+                             </div>` : '');
 
-                            $('.ajaxFetchComment').html(outPut);
+                            accordian.innerHTML = `
+                                  <div style="float: right"  class="col-md-3 parentElement">
+                                  <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
+                               </div>
+                                  ${deleteBtn}
+                                   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                       <div class="input-group mb-3">
+                                          <input id="bodyReplay"  type="text" class="form-control replay" placeholder="Replay Comment">
+                                          <div class="input-group-append">
+                                            <button data-comment="${data.id}" id="replayComment" type="submit" class="input-group-text replay  text-white bg-primary ">Save</button>
+                                          </div>
+                                        </div>
+                                   </div>
+                              `;
+
+                            li_item.appendChild(document.createTextNode(`${data.body}`));
+                            document.querySelector('.ajaxFetchComment').appendChild(li_item).after(accordian);
+                            // $('.ajaxFetchComment').html(accordian);
+
                             bodyComment.value = '';
+                            //    ;
                         },
                         error:function(err){
                             console.log(err);

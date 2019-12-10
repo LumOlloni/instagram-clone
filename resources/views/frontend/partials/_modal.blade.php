@@ -4,7 +4,6 @@
     <div class="modal-dialog" id="modal-width" role="document">
       <div class="modal-content" id="modal-content">
         <div class="modal-header">
-{{--  src="https://picsum.photos/id/347/200/200" --}}
             <img id="avatar" style="width: 75px; height: 75px" class="img-thumbnail rounded-circle" alt="">
              <h5 class="text-right ml-4 mt-4 modal-title" id="exampleModalLabel"></h5>
             <a style="display: none;" id="edit_button" class="btn btn-warning mx-auto">Edit Post</a>
@@ -13,6 +12,7 @@
           </button>
         </div>
         <div class="modal-body">
+            <h4 class="text-center mt-1 titlePost"></h4>
           <img id="img" class="img-thumbnail ml-5">
           <ul class="text-center mt-3 w-75">
             <div class="container">
@@ -32,7 +32,7 @@
                 <div class="row fetchComment">
 
                 </div>
-                <div class="ajaxFetchComment"></div>
+                  <div class="ajaxFetchComment"></div>
               </div>
             </ul>
         </div>
