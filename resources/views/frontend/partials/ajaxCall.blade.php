@@ -86,6 +86,7 @@
             var post_id = $(this).data('id');
             createComment(post_id , user);
 
+
             $.ajax({
                 type: 'GET',
                 url: `/post/${post_id}`,
@@ -148,69 +149,17 @@
                               </div>
                           </div>`;
                     });
+
                     $('.tags').html(arr);
+
                     $('.fetchComment').html(commnet);
 
-                    $('.replay').click(function () {
-                        const comment_id = $(this).data('comment');
-                        let body = '';
-                        $("input[type='text']").each(function () {
-                            body = body + $(this).val();
-                        })
+                    replayComment(post_id);
 
-                        $.ajax({
-                            type: "Post",
-                            url: "/replayComment",
-                            data: {
-                                bodyReplay: body,
-                                comment_id: comment_id,
-                                post_id: post_id
-                            },
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function (data) {
-                                console.log(data);
-                                toastr.success("You replay comment Successfully");
-                                body.value = '';
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
-                    });
-
-                    $('.replayedComment').click(function () {
-
-                        const comment_id = $(this).data('replay');
-
-                        let output = '';
-                        $.ajax({
-                            type: "GET",
-                            url: `/replayedComment/${comment_id}`,
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function (response) {
-
-                                console.log(response[0].replies);
-                                const r = response[0].replies;
-                                r.forEach(element => {
-                                    output += `<li class="list-group-item">${element.body}</li>`;
-                                });
-
-                                $('.listItem').html(output);
-
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
-
-                        $('#commentModal').modal('show');
-                    })
+                    fetchReplayComments();
 
                     $('#exampleModal').modal('show');
+
                 },
 
             });
@@ -250,6 +199,68 @@
 
             });
 
+        function  replayComment (post_id) {
+            $('.replay').click(function () {
+                const comment_id = $(this).data('comment');
+                let body = '';
+                $("input[type='text']").each(function () {
+                    body = body + $(this).val();
+                })
+
+                $.ajax({
+                    type: "Post",
+                    url: "/replayComment",
+                    data: {
+                        bodyReplay: body,
+                        comment_id: comment_id,
+                        post_id: post_id
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        toastr.success("You replay comment Successfully");
+                        body.value = '';
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+        }
+
+        function fetchReplayComments(){
+            $('.replayedComment').click(function () {
+
+                const comment_id = $(this).data('replay');
+
+                let output = '';
+                $.ajax({
+                    type: "GET",
+                    url: `/replayedComment/${comment_id}`,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+
+                        console.log(response[0].replies);
+                        const r = response[0].replies;
+                        r.forEach(element => {
+                            output += `<li class="list-group-item">${element.body}</li>`;
+                        });
+
+                        $('.listItem').html(output);
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+
+                $('#commentModal').modal('show');
+            })
+        }
 
         function createComment(post_id , user) {
             $('#comment').off('click').click(function (e) {
@@ -293,6 +304,8 @@
                                       </div>
                                   </div>`);
                                 bodyComment.value = '';
+                                replayComment(post_id);
+                                fetchReplayComments();
                             },
                             error: function (err) {
                                 console.log(err);
