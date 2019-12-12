@@ -1,6 +1,6 @@
 
 {{-- Post Modal  --}}
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"  aria-hidden="true">
     <div class="modal-dialog" id="modal-width" role="document">
       <div class="modal-content" id="modal-content">
         <div class="modal-header">
@@ -8,7 +8,7 @@
              <h5 class="text-right ml-4 mt-4 modal-title" id="exampleModalLabel"></h5>
             <a style="display: none;" id="edit_button" class="btn btn-warning mx-auto">Edit Post</a>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            <span id="closeModal" aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
@@ -25,7 +25,7 @@
             </div>
             {{-- <ul class="list-group ulList">
             </ul> --}}
-            <button  class="comment btn btn-primary mb-3">Save</button>
+            <button id="comment"  type="submit" class="comment btn btn-primary mb-3">Save</button>
           </form>
             <ul class="list-group ">
               <div class="container">
@@ -33,6 +33,7 @@
 
                 </div>
                   <div class="ajaxFetchComment"></div>
+                  <div class="commentFetch"></div>
               </div>
             </ul>
         </div>

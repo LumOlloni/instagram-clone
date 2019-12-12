@@ -95,6 +95,10 @@ class HomeController extends Controller
 
     }
 
+    public function callModal (){
+        return view('frontend.partials._modal');
+    }
+
     public function loadUnReadNotification(){
 
         return view('frontend.template.unreadNotification');

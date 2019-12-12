@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/myProfile/{id}' , "HomeController@myProfile");
     Route::get('/loadNotification' , 'HomeController@loadUnReadNotification');
     Route::get('/explorer' , 'FrontEnd\PostController@explorer');
+    Route::get('/callModal', 'HomeController@callModal');
     Route::post('/fetchPost' , 'FrontEnd\PostController@fetchPost');
     Route::post('/follow' , 'FrontEnd\FollowsController@store') ;
     Route::get('markAsRead' , 'FrontEnd\PostController@readNotification')->name('markRead');
