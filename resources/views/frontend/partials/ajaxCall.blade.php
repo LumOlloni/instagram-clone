@@ -127,14 +127,16 @@
                     `;
                     });
                     data.comments.forEach(element => {
-
                         const bool = (element.user_id == user || user_post == user);
                         console.log(bool);
 
                         let deleteBtn = (bool ? ` <div class="col-md-3">
                                     <button onclick="myFunction(${element.id})" data-delete="${element.id}" id="deleteBtn"  class="mt-1 btn btn-danger deleteBtn ">Delete</button>
                                  </div>` : '');
-                        commnet += `<li data-replay="${element.id}"  class="replayedComment list-group-item col-md-9">${element.body}</li><div class="accordion" data-replay="${element.id}"  id="accordionExample">
+                        commnet += `<li data-replay="${element.id}"  class="list-group-item col-md-9">
+                                ${element.body}
+                                <a data-replay="${element.id}"  class="replayedComment" style="float: right;padding-top: 40px; cursor:pointer;color: red;">Replay Comments</a>
+                            </li><div class="accordion" data-replay="${element.id}"  id="accordionExample">
                               <div class="col-md-3">
                                 <button id="reply" data-toggle="collapse" data-target="#${element.body}" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
                               </div>
@@ -148,6 +150,7 @@
                                     </div>
                               </div>
                           </div>`;
+
                     });
 
                     $('.tags').html(arr);
@@ -155,8 +158,8 @@
                     $('.fetchComment').html(commnet);
 
                     replayComment(post_id);
-
                     fetchReplayComments();
+
 
                     $('#exampleModal').modal('show');
 
@@ -231,9 +234,10 @@
         }
 
         function fetchReplayComments(){
+
             $('.replayedComment').click(function () {
 
-                const comment_id = $(this).data('replay');
+              const  comment_id = $(this).data('replay');
 
                 let output = '';
                 $.ajax({
@@ -289,7 +293,9 @@
                                 let deleteBtn = (bool ? ` <div class="col-md-3">
                                     <button onclick="myFunction(${data.id})" data-delete="${data.id}" id="deleteBtn"  class="mt-1 btn btn-danger deleteBtn ">Delete</button>
                                  </div>` : '');
-                               $('.commentFetch').append(`<li data-replay="${data.id}" class=" replayedComment list-group-item col-md-9">${data.body}</li><div class="accordion" data-replay="${data.id}"  id="accordionExample">
+                               $('.commentFetch').append(`<li data-replay="${data.id}" class=" list-group-item col-md-9">${data.body}
+                                          <a data-replay="${data.id}" class="replayedComment" style="float: right;padding-top: 40px; cursor:pointer;color: red;">Replay Comments</a>
+                                        </li><div class="accordion" data-replay="${data.id}"  id="accordionExample">
                                       <div class="col-md-3">
                                         <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
                                       </div>
