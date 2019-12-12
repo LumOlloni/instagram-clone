@@ -1,6 +1,6 @@
 
 {{-- Post Modal  --}}
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"  aria-hidden="true">
+<div class="modal fade "  id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"  aria-hidden="true">
     <div class="modal-dialog" id="modal-width" role="document">
       <div class="modal-content" id="modal-content">
         <div class="modal-header">
@@ -29,11 +29,9 @@
           </form>
             <ul class="list-group ">
               <div class="container">
-                <div class="row fetchComment">
-
+                <div class="row fetchComment commentFetch">
                 </div>
                   <div class="ajaxFetchComment"></div>
-                  <div class="commentFetch"></div>
               </div>
             </ul>
         </div>
@@ -51,7 +49,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="text-center">Comments</h5>
+        <h5 class="text-center">Repaly Comments</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

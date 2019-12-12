@@ -62,12 +62,10 @@
                   if (data == '') {
 
                      $('#load_data_message').html("<button type='submit' class='btn btn-warning'>No Data Found </button>");
-                     action = 'active';
-
+                        action = 'active';
                     }
                   else {
-                    // $('#load_data_message').html("<button type='submit' class='btn btn-warning'>Please Wait ... </button>");
-                       action = 'inactive';
+                      action = 'inactive';
                   }
                 }
             });

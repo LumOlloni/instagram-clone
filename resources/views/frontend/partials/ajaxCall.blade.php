@@ -102,8 +102,8 @@
                     if (data.user_id == user) {
                         document.getElementById('edit_button').style.display = "block";
                         document.getElementById('edit_button').href = `/post/${post_id}/edit`;
-
                     }
+
                     const user_post = data.user_id;
                     const userName = data.user.username;
 
@@ -133,13 +133,12 @@
                         let deleteBtn = (bool ? ` <div class="col-md-3">
                                     <button onclick="myFunction(${element.id})" data-delete="${element.id}" id="deleteBtn"  class="mt-1 btn btn-danger deleteBtn ">Delete</button>
                                  </div>` : '');
-
                         commnet += `<li data-replay="${element.id}"  class="replayedComment list-group-item col-md-9">${element.body}</li><div class="accordion" data-replay="${element.id}"  id="accordionExample">
                               <div class="col-md-3">
-                                <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
+                                <button id="reply" data-toggle="collapse" data-target="#${element.body}" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
                               </div>
                                 ${deleteBtn}
-                              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                              <div id="${element.body}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                   <div class="input-group mb-3">
                                       <input id="bodyReplay"  type="text" class="form-control replay" placeholder="Replay Comment">
                                       <div class="input-group-append">
@@ -273,60 +272,38 @@
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             success: function (data) {
-                                toastr.success("You Commeted Successfully");
-
                                 console.log(data);
                                 const bool = (data.user_id == user);
                                 let text = data.body;
-                                let accordian = document.createElement('div');
-                                accordian.className = 'accordion parentElement';
-                                accordian.style.display = 'inline';
-                                accordian.id = 'accordionExample';
-                                accordian.setAttribute('data-replay', `${data.id}`);
-
-                                const li_item = document.createElement('li');
-
-                                li_item.className = 'replayedComment list-group-item col-md-9';
-
-                                li_item.setAttribute('data-replay', `${data.id}`);
-
                                 let deleteBtn = (bool ? ` <div class="col-md-3">
-                                <button onclick="myFunction(${data.id})" id="deleteBtn"  data-delete = "${data.id}"  class="mt-1 btn btn-danger deleteBtn">Delete</button>
-                             </div>` : '');
-
-                                accordian.innerHTML = `
-                                  <div style="float: right"  class="col-md-3">
-                                  <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
-                               </div>
-                                  ${deleteBtn}
-                                   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                       <div class="input-group mb-3">
-                                          <input id="bodyReplay"  type="text" class="form-control replay" placeholder="Replay Comment">
-                                          <div class="input-group-append">
-                                            <button data-comment="${data.id}" id="replayComment" type="submit" class="input-group-text replay  text-white bg-primary ">Save</button>
-                                          </div>
-                                        </div>
-                                   </div>
-                              `;
-
-                                li_item.appendChild(document.createTextNode(`${data.body}`));
-                                document.querySelector('.commentFetch').appendChild(li_item).after(accordian);
+                                    <button onclick="myFunction(${data.id})" data-delete="${data.id}" id="deleteBtn"  class="mt-1 btn btn-danger deleteBtn ">Delete</button>
+                                 </div>` : '');
+                               $('.commentFetch').append(`<li data-replay="${data.id}" class=" replayedComment list-group-item col-md-9">${data.body}</li><div class="accordion" data-replay="${data.id}"  id="accordionExample">
+                                      <div class="col-md-3">
+                                        <button id="reply" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  class="mt-1 btn btn-primary ">Reply</button>
+                                      </div>
+                                        ${deleteBtn}
+                                      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                          <div class="input-group mb-3">
+                                              <input id="bodyReplay"  type="text" class="form-control replay" placeholder="Replay Comment">
+                                              <div class="input-group-append">
+                                                <button data-comment="${data.id}" id="replayComment" type="submit" class="input-group-text replay  text-white bg-primary ">Save</button>
+                                              </div>
+                                            </div>
+                                      </div>
+                                  </div>`);
                                 bodyComment.value = '';
                             },
                             error: function (err) {
                                 console.log(err);
 
                             }
+                        }).done(function () {
+                            toastr.success("You Commeted Successfully");
                         })
-
-                    ;
-
                 }
                 e.preventDefault();
             });
         }
-
-
     });
-
 </script>
