@@ -129,9 +129,11 @@ class PostController extends Controller
     public function explorer(){
 
         $explorer_query = Post::inRandomOrder()->whereHas('user.profile' , function ($q){
-                $q->whereDoesntHave('followers') // @Todo fix this
-                    ->whereDoesntHave('following')
-                    ->where('is_public' , 1);
+            $q->whereHas('following' , function ($query) {
+                $query->where('sender_id' , '!=' ,Auth::id())
+                    ->where('accepter_id' , '!=' , Auth::id());
+            })
+                ->where('is_public' , 1);
             })
             ->where('user_id' , '!=' , Auth::id())
             ->with('images')
