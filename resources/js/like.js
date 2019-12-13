@@ -4,6 +4,7 @@ disLike.innerHTML = '<i class="fas fa-heart text-danger"></i>';
 const like = document.createElement('div');
 like.innerHTML = '<i class="fas fa-heart text-white"></i>';
 
+
 $('.like').on('click', function (event) {
 
   const post_id = $(this).data('id');

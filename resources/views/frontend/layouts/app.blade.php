@@ -31,9 +31,11 @@
         @include('frontend.partials._modal')
         @yield('content')
 
+
         @include('frontend.partials._footer')
         @include('frontend.partials._script')
         @include('frontend.partials.ajaxCall');
+
         @yield('scripts')
 
     <script src="{{asset('js/select2.min.js')}}"></script>

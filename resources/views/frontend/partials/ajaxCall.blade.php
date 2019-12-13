@@ -1,30 +1,10 @@
 <script>
 
+
     $(document).ready(function () {
 
-        $('#drop').click(function () {
-            // alert('request');
-            const span = document.getElementById('spanNotification');
-            const unRead = document.getElementById('unreadNotification');
-            $.ajax({
-                type: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: "{!! route('markRead')!!}",
-                cache: false,
 
-                success: function (data) {
-                    if (span) {
-                        span.style.display = 'none';
-                    }
-                    if (unRead) {
-                        unRead.style.background = '#fff';
-                    }
-                    console.log(data);
-                }
-            })
-        });
+
 
         function unReadNotification() {
             let span = document.querySelector('.unRead');
@@ -38,19 +18,18 @@
                             if (span != null){
                                 span.innerText = `${data.length}`;
                             }
-                            $('#notification').append(`<a href="/profile/${data[i].action}"
+                            $('#notification').html(`<a href="/profile/${data[i].action}"
                                id="unreadNotification"  style="background-color: lightgray" class="dropdown-item">${data[i].message}</a>`);
                         }
                     }else if(data.length === 0) {
                         // $('#notification').remove();
                     }
-
-
                 },
             });
         }
 
         function readNotification() {
+            let notification = null;
             $.ajax({
                 type:'GET',
                 url:'/readNotification',
@@ -58,15 +37,42 @@
                     console.log(data);
                     if (data.length >= 1){
                         for (let i = 0;i < data.length;i++){
-                            $('#readNotifcation').append(`<a href="/profile/${data[i].action}"
+                         notification  = $('#readNotifcation').append(`<a href="/profile/${data[i].action}"
                                id="unreadNotification"  style="background-color: white" class="dropdown-item">${data[i].message}</a>`);
                         }
+                        return notification;
                     }else if(data.length === 0) {
                         $('#readNotifcation').remove();
+                        return  null;
                     }
                 },
             });
         }
+
+        $('#drop').off('click').click(function () {
+
+            const span = document.getElementById('spanNotification');
+            const unRead = document.getElementById('unreadNotification');
+
+            $.ajax({
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{!! route('markRead')!!}",
+                cache: false,
+                success: function (data) {
+                    if (span) {
+                        span.style.display = 'none';
+                    }
+                    if (unRead) {
+                        unRead.style.background = '#fff';
+                    }
+                    console.log(data);
+                }
+            })
+        });
+
 
         $(window).on('load', function() {
             readNotification();

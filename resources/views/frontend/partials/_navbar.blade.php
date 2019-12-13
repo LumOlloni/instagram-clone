@@ -37,28 +37,14 @@
                       </ul>
                   </div>
                 <li  class="nav-item dropdown">
-                    <a id="drop" id="navbarNotification" class="nav-link dropdown-toggle mt-1"  role="button"
+                    <a id="drop"  class="nav-link dropdown-toggle mt-1"  role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="#">
-{{--                        @if(auth()->user()->unreadNotifications->count()) {{auth()->user()->unreadNotifications->count()}}--}}
                             <span id="spanNotification"  class="badge unRead badge-danger"></span>
                             <i class="fas fa-bell fa-lg  mr-1"></i>
-{{--                            @else--}}
-{{--                                <i class="fas fa-bell fa-lg  mr-1"></i>--}}
-{{--                        @endif--}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarNotification">
                         <div id="notification"></div>
                         <div id="readNotifcation"></div>
-{{--                        @foreach(auth()->user()->unreadNotifications as $n)--}}
-{{--                            <a  href="/profile/{{$n->data['action']}}"  id="unreadNotification"  style="background-color: lightgray" class="dropdown-item">--}}
-{{--                                {{$n->data['message']}}--}}
-{{--                            </a>--}}
-{{--                        @endforeach--}}
-{{--                        @foreach(auth()->user()->readnotifications  as $n)--}}
-{{--                            <a href="/profile/{{$n->data['action']}}"  class="dropdown-item notification">--}}
-{{--                                {{$n->data['message']}}--}}
-{{--                             </a>--}}
-{{--                            @endforeach--}}
                     </div>
                 </li>
                 <li class="nav-item">

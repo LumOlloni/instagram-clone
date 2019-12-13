@@ -239,9 +239,8 @@ class PostController extends Controller
 
     public function readNotification()
     {
-        ReadNotification::dispatchNow();
-
-        return response()->json('Success');
+      $markAsRead = ReadNotification::dispatchNow();
+      return response()->json($markAsRead);
     }
 
     public function unReadNotification(){
