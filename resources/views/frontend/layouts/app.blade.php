@@ -34,7 +34,7 @@
 
         @include('frontend.partials._footer')
         @include('frontend.partials._script')
-        @include('frontend.partials.ajaxCall');
+        @include('frontend.partials.ajaxCall')
 
         @yield('scripts')
 

@@ -16,6 +16,7 @@
                     if (data.length >= 1){
                         for (let i = 0;i < data.length;i++){
                             if (span != null){
+                                span.style.display = 'block';
                                 span.innerText = `${data.length}`;
                             }
                             $('#notification').html(`<a href="/profile/${data[i].action}"

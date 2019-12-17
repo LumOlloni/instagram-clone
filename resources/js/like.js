@@ -1,29 +1,31 @@
-let post = 0;
-const disLike = document.createElement('div');
-disLike.innerHTML = '<i class="fas fa-heart text-danger"></i>';
-const like = document.createElement('div');
-like.innerHTML = '<i class="fas fa-heart text-white"></i>';
+    let post = 0;
 
+        $('.like').on('click', function (event) {
 
-$('.like').on('click', function (event) {
+            const post_id = $(this).data('id');
+            let click = $(this);
 
-  const post_id = $(this).data('id');
+            const isLike = event.target.previousElementSibling == null;
 
-  const isLike = event.target.previousElementSibling == null;
+            if (click.hasClass('fas')) {
+                click.addClass('far');
+                click.removeClass('fas');
+            }else {
+                click.addClass('fas');
+                click.removeClass('far');
+            }
 
-  $.ajax({
-      method: 'POST',
-      url: '/likePost',
-      data: {
-        isLike: isLike,
-        post_id: post_id
-      },
-      headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-  })
-  .done(function () {
-      event.target.innerText = isLike ? event.target.innerHTML ==  "Like" ?  'Dislike' :  'Like': 'Dislike';
-  })
-    event.preventDefault();
-})
+            $.ajax({
+                method: 'POST',
+                url: '/likePost',
+                data: {
+                    isLike: isLike,
+                    post_id: post_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+
+            })
+        event.preventDefault();
+    })

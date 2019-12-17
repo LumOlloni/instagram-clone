@@ -73,10 +73,6 @@ class ProfileController extends Controller
         else {
             return abort('403');
         }
-
-
-
-
     }
 
     /**

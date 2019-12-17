@@ -94,13 +94,19 @@
 /***/ (function(module, exports) {
 
 var post = 0;
-var disLike = document.createElement('div');
-disLike.innerHTML = '<i class="fas fa-heart text-danger"></i>';
-var like = document.createElement('div');
-like.innerHTML = '<i class="fas fa-heart text-white"></i>';
 $('.like').on('click', function (event) {
   var post_id = $(this).data('id');
+  var click = $(this);
   var isLike = event.target.previousElementSibling == null;
+
+  if (click.hasClass('fas')) {
+    click.addClass('far');
+    click.removeClass('fas');
+  } else {
+    click.addClass('fas');
+    click.removeClass('far');
+  }
+
   $.ajax({
     method: 'POST',
     url: '/likePost',
@@ -111,8 +117,6 @@ $('.like').on('click', function (event) {
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
-  }).done(function () {
-    event.target.innerText = isLike ? event.target.innerHTML == "Like" ? 'Dislike' : 'Like' : 'Dislike';
   });
   event.preventDefault();
 });

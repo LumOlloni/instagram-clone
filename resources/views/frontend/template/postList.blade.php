@@ -14,14 +14,16 @@
                           <a id="id" class="openModal" data-id="{{$item->id}}"><img  class="card-img-top" src="/storage/post_image/{{$item->images->path}}">
                           </a>
                           <div class="interaction">
-{{--                              @if(Auth::user()->likes()->where('post_id' , $item->id)->first())--}}
-{{--                                  <a  data-id="{{$item->id}}" class="like" >{!! $dislike !!}</a>--}}
-{{--                              @else--}}
-{{--                                  <a  data-id="{{$item->id}}" class="like" >{!! $like !!}</a>--}}
-{{--                              @endif--}}
-                              <a  data-id="{{$item->id}}" class="like" href="#"> {{Auth::user()->likes()->where('post_id' , $item->id)->first() ?
-                              Auth::user()->likes()->where('post_id' , $item->id)->first() ? 'Dislike' : 'Like' : 'Like'}}  </a>
-                          </div>
+
+                              @if(Auth::user()->likes()->where('post_id' , $item->id)->first())
+                                   @if(Auth::user()->likes()->where('post_id' , $item->id)->first())
+                                      <i style="font-size: 30px;" data-id="{{$item->id}}" class="fas liked fa-heart like mt-1  text-danger"></i>
+                                  @endif
+                                  @else
+                                     <i style="font-size: 30px;"  data-id="{{$item->id}}"  class="far  fa-heart  mt-1   text-danger like"></i>
+                              @endif
+
+                      </div>
                       </div>
                   </div>
             </div>

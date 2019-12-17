@@ -34,14 +34,14 @@ class Post extends Model
 
     public function likes()
     {
-        return $this->belongsTo(Like::class , 'post_id');
+        return $this->hasMany(Like::class , 'post_id');
     }
 
     public function comments()
     {
         return $this->hasMany(Comment::class)->whereNull('parent_id');
     }
-    
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);

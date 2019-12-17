@@ -30,6 +30,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/follow' , 'FrontEnd\FollowsController@store') ;
     Route::get('markAsRead' , 'FrontEnd\PostController@readNotification')->name('markRead');
     Route::get('/unReadNotification' , 'FrontEnd\PostController@unReadNotification');
+    Route::get('/download' , 'FrontEnd\ExportController@exportData');
+    Route::get('/downloadNotificationData', 'FrontEnd\ExportController@exportNotificationData');
+    Route::get('/storeNoticationData' , 'FrontEnd\ExportController@storeNotificationData');
+    Route::get('/storeExel' , 'FrontEnd\ExportController@storeData');
     Route::get('/readNotification' , 'FrontEnd\PostController@notifactionRead');
     Route::post('/unfollow' , 'FrontEnd\FollowsController@unFollow');
     Route::post('/accept/{id}' , 'FrontEnd\FollowsController@accept');
@@ -43,5 +47,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('profile', 'FrontEnd\ProfileController');
 
     Route::resource('post', 'FrontEnd\PostController');
+    Route::resource('export' , 'FrontEnd\ExportController');
     Route::resource('comment', 'FrontEnd\CommentController');
 });
